@@ -1,0 +1,15 @@
+{
+	"name": "firstadf-1505",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned,UserAssigned",
+		"principalId": "ca12fa4f-e800-430c-b39a-3de47d5f3dfb",
+		"tenantId": "7a524129-8257-4489-86ba-4824bfe542e8",
+		"userAssignedIdentities": {
+			"/subscriptions/dab63fa7-b658-4f30-9c43-166248715acc/resourcegroups/Dattha/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testuserassignedmanagement": {
+				"clientId": "60fac182-9ce8-4ba7-8080-8f77fa99081f",
+				"principalId": "200ae28c-d72d-4291-a505-c9ac7fd162ae"
+			}
+		}
+	}
+}

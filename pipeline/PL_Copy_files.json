@@ -1,0 +1,88 @@
+{
+	"name": "PL_Copy_files",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy files",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"modifiedDatetimeEnd": {
+								"value": "@pipeline().parameters.Windowsendtime",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_Input_csv",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "raw"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_Input_csv",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "silver"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"Windowsstarttime": {
+				"type": "string"
+			},
+			"Windowsendtime": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-02-07T05:23:37Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

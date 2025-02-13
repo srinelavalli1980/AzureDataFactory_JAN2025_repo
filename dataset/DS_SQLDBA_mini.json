@@ -1,0 +1,13 @@
+{
+	"name": "DS_SQLDBA_mini",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDBA_mini",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

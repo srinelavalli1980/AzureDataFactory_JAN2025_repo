@@ -1,0 +1,17 @@
+{
+	"name": "LS_Source_onprem_Sqlserver",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=DESKTOP-NUVB7F9\\SQLEXPRESS;initial catalog=devjan",
+			"userName": "DESKTOP-NUVB7F9\\SRINIVASARAO",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiMzJmM2EyNS03N2EzLTQ1NmEtYjEwZS0zYTY1NTk0Mzc3ZWUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "on-prem-shir",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

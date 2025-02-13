@@ -1,0 +1,21 @@
+{
+	"name": "DS_getMetaData_mini",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDBA_mini",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SCHEMA_NAME": {
+				"type": "string"
+			},
+			"TABLE_NAME": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
