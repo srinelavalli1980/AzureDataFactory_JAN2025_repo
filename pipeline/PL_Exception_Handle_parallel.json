@@ -1,0 +1,197 @@
+{
+	"name": "PL_Exception_Handle_parallel",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Message",
+					"value": 1
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Message",
+					"value": 2
+				}
+			},
+			{
+				"name": "Set variable3",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Message",
+					"value": "success2"
+				}
+			},
+			{
+				"name": "Set Error",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Wait1",
+						"dependencyConditions": [
+							"Skipped",
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Error_Message",
+					"value": {
+						"value": "@concat(activity('Set variable1')?.Error?.Message, '  |  ' , activity('Set variable2')?.Error?.Message,  '  |  ', activity('Set variable3')?.Error?.Message)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Stored procedure for log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "sendNotification",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[CUSTOM_LOG_USP]",
+					"storedProcedureParameters": {
+						"ERROR_MESSAGE": {
+							"value": {
+								"value": "@variables('Error_Message')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINENAME": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"RUNID": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_Source_onprem_Sqlserver",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sendNotification",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Set Error",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"url": {
+						"value": "https://prod-11.northcentralus.logic.azure.com:443/workflows/ae6c34d1e83d4584ac09df04ac1dbfff/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=VS78bGr5BBPvV5CTk2EGWor8trFjmB5ez9d01Cferhc",
+						"type": "Expression"
+					},
+					"body": {
+						"value": "{\"PipeLineName\":\"@{pipeline().Pipeline}\",\n\"ERROR\":\"@{variables('Error_Message')}\",\n\"PipeLineRunid\":\"@{pipeline().RunId}\"}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set variable2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set variable3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"variables": {
+			"Message": {
+				"type": "Integer"
+			},
+			"Error_Message": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-02-11T11:05:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
