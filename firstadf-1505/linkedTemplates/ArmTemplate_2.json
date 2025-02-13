@@ -1,0 +1,2060 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "firstadf-1505"
+		},
+		"tr_storage_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/dab63fa7-b658-4f30-9c43-166248715acc/resourceGroups/Dattha/providers/Microsoft.Storage/storageAccounts/devjanbatchadlsgen2"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_two_files_dianamic_mapping')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata bring file names",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_Source",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_folder": "triggerdata",
+									"container": "raw"
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"modifiedDatetimeStart": null,
+								"modifiedDatetimeEnd": null,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach file",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata bring file names",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata bring file names').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data dynamic",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true,
+												"modifiedDatetimeStart": null,
+												"modifiedDatetimeEnd": null,
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings",
+												"copyBehavior": "PreserveHierarchy"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".csv"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"value": "@if(contains(item().name,'sales'),pipeline().parameters.p_mapping1,pipeline().parameters.p_mapping2)",
+											"type": "Expression"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_Source",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_folder": "triggerdata",
+												"container": "raw"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_Source",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_folder": "dianamic",
+												"container": "silver"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_mapping2": {
+						"type": "object",
+						"defaultValue": {
+							"type": "TabularTranslator",
+							"mappings": [
+								{
+									"source": {
+										"name": "ID",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ID",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Type",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Type",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "SKU",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "SKU",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Published",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Published",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Is featured?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Is featured?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Visibility in catalog",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Visibility in catalog",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Short description",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Short description",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Description",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Description",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Date sale price starts",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Date sale price starts",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Date sale price ends",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Date sale price ends",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Tax status",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Tax status",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Tax class",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Tax class",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "In stock?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "In stock?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Stock",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Stock",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Backorders allowed?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Backorders allowed?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Sold individually?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Sold individually?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Weight (lbs)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Weight (lbs)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Length (in)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Length (in)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Width (in)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Width (in)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Height (in)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Height (in)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Allow customer reviews?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Allow customer reviews?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Purchase note",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Purchase note",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Sale price",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Sale price",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Regular price",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Regular price",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Categories",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Categories",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Tags",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Tags",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Shipping class",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Shipping class",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Images",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Images",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download limit",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download limit",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download expiry days",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download expiry days",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Parent",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Parent",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Grouped products",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Grouped products",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Upsells",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Upsells",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Cross-sells",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Cross-sells",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "External URL",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "External URL",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Button text",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Button text",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Position",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Position",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 1 name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 1 name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 1 value(s)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 1 value(s)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 1 visible",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 1 visible",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 1 global",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 1 global",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 2 name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 2 name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 2 value(s)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 2 value(s)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 2 visible",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 2 visible",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 2 global",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 2 global",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Meta: _wpcom_is_markdown",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Meta: _wpcom_is_markdown",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download 1 name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download 1 name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download 1 URL",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download 1 URL",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download 2 name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download 2 name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download 2 URL",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download 2 URL",
+										"type": "String",
+										"physicalType": "String"
+									}
+								}
+							],
+							"typeConversion": true,
+							"typeConversionSettings": {
+								"allowDataTruncation": true,
+								"treatBooleanAsNumber": false
+							}
+						}
+					},
+					"p_mapping1": {
+						"type": "object",
+						"defaultValue": {
+							"type": "TabularTranslator",
+							"mappings": [
+								{
+									"source": {
+										"name": "ORDERNUMBER",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ORDERNUMBER",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "QUANTITYORDERED",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "QUANTITYORDERED",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "PRICEEACH",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "PRICEEACH",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "ORDERLINENUMBER",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ORDERLINENUMBER",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "SALES",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "SALES",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "ORDERDATE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ORDERDATE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "STATUS",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "STATUS",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "QTR_ID",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "QTR_ID",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "MONTH_ID",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "MONTH_ID",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "YEAR_ID",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "YEAR_ID",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "PRODUCTLINE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "PRODUCTLINE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "MSRP",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "MSRP",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "PRODUCTCODE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "PRODUCTCODE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "CUSTOMERNAME",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "CUSTOMERNAME",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "PHONE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "PHONE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "ADDRESSLINE1",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ADDRESSLINE1",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "ADDRESSLINE2",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ADDRESSLINE2",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "CITY",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "CITY",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "STATE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "STATE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "POSTALCODE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "POSTALCODE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "COUNTRY",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "COUNTRY",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "TERRITORY",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "TERRITORY",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "CONTACTLASTNAME",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "CONTACTLASTNAME",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "CONTACTFIRSTNAME",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "CONTACTFIRSTNAME",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "DEALSIZE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "DEALSIZE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								}
+							],
+							"typeConversion": true,
+							"typeConversionSettings": {
+								"allowDataTruncation": true,
+								"treatBooleanAsNumber": false
+							}
+						}
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-02-12T20:19:26Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_onprem_ss')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_Source_onprem_Sqlserver",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "customer_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "first_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "last_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "email",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_at",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "updated_at",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Customers"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Copy_activity')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data using query",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "select * from Customers where updated_at > '2025-02-05 13:26:55.093'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"customer_id"
+									]
+								},
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_onprem_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_azure_cloud_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-02-06T15:59:55Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Copy_activity_WM_Parameter_using_File')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach Table",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "get_Metadata_lookup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('get_Metadata_lookup').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data using query",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "get_NEWWM",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										},
+										{
+											"activity": "get_OLDWM",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "select * from @{item().TABLE_NAME} where @{item().WaterMark_Column}  > '@{activity('get_OLDWM').output.firstRow.OLDWM}' and @{item().WaterMark_Column}  <= '@{activity('get_NEWWM').output.firstRow.NEWWM}'",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"isolationLevel": "Serializable",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "upsert",
+											"upsertSettings": {
+												"useTempDB": true,
+												"keys": {
+													"value": "@item().MERGE_KEY",
+													"type": "Expression"
+												}
+											},
+											"sqlWriterUseTableLock": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_onprem_ss",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_azure_cloud_ss_parameter",
+											"type": "DatasetReference",
+											"parameters": {
+												"SINK_TABLE_NAME": {
+													"value": "@{item().TABLE_NAME}",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "get_OLDWM",
+									"type": "Lookup",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "select WatermarkValue as OLDWM from watermarktable where TableName = '@{item().TABLE_NAME}'",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"dataset": {
+											"referenceName": "DS_azure_cloud_ss_parameter",
+											"type": "DatasetReference",
+											"parameters": {
+												"SINK_TABLE_NAME": {
+													"value": "@{item().TABLE_NAME}",
+													"type": "Expression"
+												}
+											}
+										}
+									}
+								},
+								{
+									"name": "get_NEWWM",
+									"type": "Lookup",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "select max(@{item().WaterMark_Column}) as NEWWM from @{item().TABLE_NAME}",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"dataset": {
+											"referenceName": "DS_onprem_ss",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									}
+								},
+								{
+									"name": "SP_WM_Update",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Copy data using query",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[usp_write_watermark]",
+										"storedProcedureParameters": {
+											"LastModifiedtime": {
+												"value": {
+													"value": "@{activity('get_NEWWM').output.firstRow.NEWWM}",
+													"type": "Expression"
+												},
+												"type": "Datetime"
+											},
+											"TableName": {
+												"value": {
+													"value": "@{item().TABLE_NAME}",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LS_TGT_Cloud_Sqlserver",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "get_Metadata_lookup",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "DS_Metadata",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-02-07T04:06:31Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Copy_activity_using_watermark')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data using query",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "get_OLDWM",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "get_NEWWM",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": {
+									"value": "select * from Customers where updated_at > '@{activity('get_OLDWM').output.firstRow.OLDWM}' and updated_at <= '@{activity('get_NEWWM').output.firstRow.NEWWM}'",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "upsert",
+								"upsertSettings": {
+									"useTempDB": true,
+									"keys": [
+										"customer_id"
+									]
+								},
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_onprem_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_azure_cloud_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "get_OLDWM",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "select WatermarkValue from watermarktable where TableName = 'CUSTOMERS'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_azure_cloud_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "get_NEWWM",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "select * from customers",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_onprem_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "SP_WM_Update",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Copy data using query",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[usp_write_watermark]",
+							"storedProcedureParameters": {
+								"LastModifiedtime": {
+									"value": {
+										"value": "@activity('get_NEWWM').output.firstRow.NEWWM",
+										"type": "Expression"
+									},
+									"type": "Datetime"
+								},
+								"TableName": {
+									"value": "CUSTOMERS",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_TGT_Cloud_Sqlserver",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-02-06T15:59:55Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Copy_activity_using_watermark_Parameter')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach Table",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@pipeline().parameters.TableList",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data using query",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "get_NEWWM",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										},
+										{
+											"activity": "get_OLDWM",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "select * from @{item().TABLE_NAME} where @{item().WaterMark_Column}  > '@{activity('get_OLDWM').output.firstRow.OLDWM}' and @{item().WaterMark_Column}  <= '@{activity('get_NEWWM').output.firstRow.NEWWM}'",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"isolationLevel": "Serializable",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "upsert",
+											"upsertSettings": {
+												"useTempDB": true,
+												"keys": {
+													"value": "@item().MERGE_KEY",
+													"type": "Expression"
+												}
+											},
+											"sqlWriterUseTableLock": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_onprem_ss",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_azure_cloud_ss_parameter",
+											"type": "DatasetReference",
+											"parameters": {
+												"SINK_TABLE_NAME": {
+													"value": "@{item().TABLE_NAME}",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "get_OLDWM",
+									"type": "Lookup",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "select WatermarkValue as OLDWM from watermarktable where TableName = '@{item().TABLE_NAME}'",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"dataset": {
+											"referenceName": "DS_azure_cloud_ss_parameter",
+											"type": "DatasetReference",
+											"parameters": {
+												"SINK_TABLE_NAME": {
+													"value": "@{item().TABLE_NAME}",
+													"type": "Expression"
+												}
+											}
+										}
+									}
+								},
+								{
+									"name": "get_NEWWM",
+									"type": "Lookup",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "select max(@{item().WaterMark_Column}) as NEWWM from @{item().TABLE_NAME}",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"dataset": {
+											"referenceName": "DS_onprem_ss",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									}
+								},
+								{
+									"name": "SP_WM_Update",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Copy data using query",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[usp_write_watermark]",
+										"storedProcedureParameters": {
+											"LastModifiedtime": {
+												"value": {
+													"value": "@{activity('get_NEWWM').output.firstRow.NEWWM}",
+													"type": "Expression"
+												},
+												"type": "Datetime"
+											},
+											"TableName": {
+												"value": {
+													"value": "@{item().TABLE_NAME}",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LS_TGT_Cloud_Sqlserver",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"TableList": {
+						"type": "array",
+						"defaultValue": [
+							{
+								"TABLE_NAME": "CATEGORIES",
+								"WaterMark_Column": "updated_at",
+								"MERGE_KEY": [
+									"category_id"
+								]
+							},
+							{
+								"TABLE_NAME": "CUSTOMERS",
+								"WaterMark_Column": "updated_at",
+								"MERGE_KEY": [
+									"customer_id"
+								]
+							}
+						]
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-02-06T18:26:10Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_on_prem_data_migration')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data from on prem to cloud",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"validateDataConsistency": true,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_onprem_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_azure_cloud_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-02-06T15:59:55Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_onprem_ADLS_error_log')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data from onprem to ADLS",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "select * from [DBO].[CUSTOM_LOG]",
+								"queryTimeout": "02:00:00",
+								"isolationLevel": "ReadCommitted",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_onprem_ss",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Input_csv",
+								"type": "DatasetReference",
+								"parameters": {
+									"container": "error-log"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-02-11T11:29:26Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_storage')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PL_COPY_RAW_SILVER_Storage_Event",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/raw/blobs/",
+					"blobPathEndsWith": ".CSV",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('tr_storage_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
