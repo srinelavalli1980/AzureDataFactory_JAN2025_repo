@@ -111,10 +111,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": {
-							"value": "select max(updated_at) as NEWWM from @{item().TABLE_NAME}",
-							"type": "Expression"
-						},
+						"sqlReaderQuery": "select * from customers",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
