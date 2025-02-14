@@ -112,7 +112,7 @@
 					"source": {
 						"type": "SqlServerSource",
 						"sqlReaderQuery": {
-							"value": "select max(updated_at) as NEWWM from @{item().TABLE_NAME}",
+							"value": "select max(updated_at) as NEWWM from DBO.CUSTOMERS",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
