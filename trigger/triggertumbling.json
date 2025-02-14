@@ -1,0 +1,35 @@
+{
+	"name": "triggertumbling",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipeline": {
+			"pipelineReference": {
+				"referenceName": "PL_Copy_files",
+				"type": "PipelineReference"
+			},
+			"parameters": {
+				"Windowsstarttime": {
+					"type": "Expression",
+					"value": "@trigger().outputs.windowStartTime"
+				},
+				"Windowsendtime": {
+					"type": "Expression",
+					"value": "@trigger().outputs.windowEndTime"
+				}
+			}
+		},
+		"type": "TumblingWindowTrigger",
+		"typeProperties": {
+			"frequency": "Minute",
+			"interval": 5,
+			"startTime": "2025-02-13T17:21:00Z",
+			"delay": "00:00:00",
+			"maxConcurrency": 50,
+			"retryPolicy": {
+				"intervalInSeconds": 30
+			},
+			"dependsOn": []
+		}
+	}
+}
