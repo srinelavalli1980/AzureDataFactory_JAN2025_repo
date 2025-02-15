@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "salesdata",
+				"folderPath": "USAUKIND",
 				"fileSystem": "silver"
 			},
 			"columnDelimiter": ",",
