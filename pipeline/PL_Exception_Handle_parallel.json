@@ -148,7 +148,7 @@
 						"type": "Expression"
 					},
 					"body": {
-						"value": "{\"pipeline_name\":\"@{pipeline().Pipeline}\",\"pipeline_id\":\"@{pipeline().RunId}\",\"error_msg\":\"@{variables('Message')}\",\"error_attach_name\":\"dummy_err_attachment.txt\"}",
+						"value": "{\"PipeLineName\":\"@{pipeline().Pipeline}\",\n\"ERROR\":\"@{variables('Error_Message')}\",\n\"PipeLineRunid\":\"@{pipeline().RunId}\",\n\"error_attach_name\":\"Error_log.csv\"}",
 						"type": "Expression"
 					}
 				}
