@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy files",
+				"name": "Copy files incremental",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -82,7 +82,7 @@
 			}
 		},
 		"annotations": [],
-		"lastPublishTime": "2025-02-07T05:23:37Z"
+		"lastPublishTime": "2025-02-13T17:43:15Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

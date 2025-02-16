@@ -1,0 +1,79 @@
+{
+	"name": "DF_Exists",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Exxists_1",
+						"type": "DatasetReference"
+					},
+					"name": "source1exist"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_UNION_2",
+						"type": "DatasetReference"
+					},
+					"name": "source2exists"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Sink_exists",
+						"type": "DatasetReference"
+					},
+					"name": "sink1exists"
+				}
+			],
+			"transformations": [
+				{
+					"name": "exists1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EmployeeID as integer,",
+				"          EmployeeName as string,",
+				"          Address as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1exist",
+				"source(output(",
+				"          EmployeeID as integer,",
+				"          EmployeeName as string,",
+				"          Address as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2exists",
+				"source1exist, source2exists exists(source1exist@EmployeeID == source2exists@EmployeeID,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> exists1",
+				"exists1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SaleID as string,",
+				"          { CustomerID} as string,",
+				"          { SaleDate} as string,",
+				"          { ProductID} as string,",
+				"          { Quantity} as string,",
+				"          { UnitPrice} as string,",
+				"          { TotalAmount} as string,",
+				"          CustomerID as string,",
+				"          { CustomerName} as string,",
+				"          { Email} as string,",
+				"          { Phone} as string,",
+				"          { Address} as string",
+				"     ),",
+				"     partitionFileNames:['Sinkexists.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1exists"
+			]
+		}
+	}
+}

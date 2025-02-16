@@ -1,0 +1,94 @@
+{
+	"name": "DF_UNION",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_union_input1",
+						"type": "DatasetReference"
+					},
+					"name": "Splitdata"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_UNION_2",
+						"type": "DatasetReference"
+					},
+					"name": "Union2employee"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_union_input",
+						"type": "DatasetReference"
+					},
+					"name": "union3"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Sink_Union",
+						"type": "DatasetReference"
+					},
+					"name": "sinkunion"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Union"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EmployeeID as string,",
+				"          EmployeeName as string,",
+				"          Address as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Splitdata",
+				"source(output(",
+				"          EmployeeID as string,",
+				"          EmployeeName as string,",
+				"          Address as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Union2employee",
+				"source(output(",
+				"          Row as string,",
+				"          Country as string,",
+				"          Year as string,",
+				"          Product_Type as string,",
+				"          Sales as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> union3",
+				"Splitdata, Union2employee, union3 union(byName: true)~> Union",
+				"Union sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SaleID as string,",
+				"          { CustomerID} as string,",
+				"          { SaleDate} as string,",
+				"          { ProductID} as string,",
+				"          { Quantity} as string,",
+				"          { UnitPrice} as string,",
+				"          { TotalAmount} as string,",
+				"          CustomerID as string,",
+				"          { CustomerName} as string,",
+				"          { Email} as string,",
+				"          { Phone} as string,",
+				"          { Address} as string",
+				"     ),",
+				"     partitionFileNames:['SinkUnion.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkunion"
+			]
+		}
+	}
+}

@@ -111,10 +111,6 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": {
-							"value": "select max(updated_at) as NEWWM from DBO.CUSTOMERS",
-							"type": "Expression"
-						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -166,7 +162,7 @@
 			}
 		],
 		"annotations": [],
-		"lastPublishTime": "2025-02-06T15:59:55Z"
+		"lastPublishTime": "2025-02-13T08:03:01Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

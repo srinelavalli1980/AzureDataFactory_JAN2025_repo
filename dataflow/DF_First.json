@@ -1,0 +1,63 @@
+{
+	"name": "DF_First",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Source_DF",
+						"type": "DatasetReference"
+					},
+					"name": "SalesData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_SINK_DF",
+						"type": "DatasetReference"
+					},
+					"name": "sinksales"
+				}
+			],
+			"transformations": [
+				{
+					"name": "filtertrasformation"
+				},
+				{
+					"name": "selecttrasforamtion"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Country as string,",
+				"          Year as integer,",
+				"          Product_Type as string,",
+				"          Sales as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> SalesData",
+				"SalesData filter(Country == 'USA' && Product_Type  == 'electronics') ~> filtertrasformation",
+				"filtertrasformation select(mapColumn(",
+				"          Country,",
+				"          Year,",
+				"          Sales",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selecttrasforamtion",
+				"selecttrasforamtion sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Salesdata.csv'],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinksales"
+			]
+		}
+	}
+}

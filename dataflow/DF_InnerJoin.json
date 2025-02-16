@@ -1,0 +1,74 @@
+{
+	"name": "DF_InnerJoin",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Sales_Join",
+						"type": "DatasetReference"
+					},
+					"name": "Salesjoin"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_customer_join",
+						"type": "DatasetReference"
+					},
+					"name": "customer"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Sink_InnerJoin",
+						"type": "DatasetReference"
+					},
+					"name": "SinkInnerJoin"
+				}
+			],
+			"transformations": [
+				{
+					"name": "innerjoin"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          SaleID as short,",
+				"          { CustomerID} as integer,",
+				"          { SaleDate} as string,",
+				"          { ProductID} as short,",
+				"          { Quantity} as short,",
+				"          { UnitPrice} as double,",
+				"          { TotalAmount} as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Salesjoin",
+				"source(output(",
+				"          CustomerID as integer,",
+				"          { CustomerName} as string,",
+				"          { Email} as string,",
+				"          { Phone} as string,",
+				"          { Address} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> customer",
+				"Salesjoin, customer join({ CustomerID} == CustomerID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> innerjoin",
+				"innerjoin sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Salesjoincustomer.csv'],",
+				"     truncate: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SinkInnerJoin"
+			]
+		}
+	}
+}
