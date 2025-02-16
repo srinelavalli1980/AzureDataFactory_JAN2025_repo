@@ -111,7 +111,6 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from customers",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
