@@ -13,20 +13,37 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "selectMovie"
+				},
+				{
+					"name": "filter1movie"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          movie as string,",
 				"          title as string,",
 				"          genres as string,",
-				"          year as string,",
-				"          Rating as string,",
-				"          {Rotton Tomato} as string",
+				"          year as integer,",
+				"          Rating as short,",
+				"          {Rotton Tomato} as short",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: true,",
-				"     moveFiles: ['/moviefile','archive']) ~> sourceofMoviedata"
+				"     moveFiles: ['/moviefile','archive']) ~> sourceofMoviedata",
+				"sourceofMoviedata select(mapColumn(",
+				"          movie,",
+				"          title,",
+				"          genres,",
+				"          year,",
+				"          {Rotten Tomato} = {Rotton Tomato}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectMovie",
+				"selectMovie filter(ERROR_FUNCTION('')) ~> filter1movie"
 			]
 		}
 	}
