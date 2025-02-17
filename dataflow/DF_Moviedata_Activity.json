@@ -19,6 +19,9 @@
 				},
 				{
 					"name": "filter1movie"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -43,7 +46,8 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectMovie",
-				"selectMovie filter(ERROR_FUNCTION('')) ~> filter1movie"
+				"selectMovie filter(year>1910 && year<2000) ~> filter1movie",
+				"filter1movie derive(Primery_genres = iif(instr(genres,'|') > 0, substring(genres,1,instr(genres,'|')-1), genres)) ~> derivedColumn1"
 			]
 		}
 	}
