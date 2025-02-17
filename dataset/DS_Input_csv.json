@@ -15,7 +15,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "moviesdata.csv",
 				"folderPath": "moviefile",
 				"fileSystem": {
 					"value": "@dataset().container",
