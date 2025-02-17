@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
-				"relativeUrl": "akjainade/akjain-adf/master/"
+				"relativeUrl": "akjainade/akjain-adf/master/moviesDB.csv"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
