@@ -60,7 +60,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     moveFiles: ['/moviefile','archive']) ~> sourceofMoviedata",
+				"     moveFiles: ['moviefile','archive']) ~> sourceofMoviedata",
 				"sourceofMoviedata select(mapColumn(",
 				"          movie,",
 				"          title,",
