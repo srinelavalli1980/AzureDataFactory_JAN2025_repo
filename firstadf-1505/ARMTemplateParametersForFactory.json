@@ -8,6 +8,9 @@
 		"LS_ADLS_metadata_accountKey": {
 			"value": ""
 		},
+		"LS_INPUT_DF_connectionString": {
+			"value": ""
+		},
 		"LS_Multi_file_accountKey": {
 			"value": ""
 		},
@@ -32,6 +35,9 @@
 		"LS_ADLS_metadata_properties_typeProperties_url": {
 			"value": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
 		},
+		"LS_HttpServer1_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/"
+		},
 		"LS_Multi_file_properties_typeProperties_url": {
 			"value": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
 		},
@@ -52,6 +58,12 @@
 		},
 		"tr_storage_properties_typeProperties_scope": {
 			"value": "/subscriptions/dab63fa7-b658-4f30-9c43-166248715acc/resourceGroups/Dattha/providers/Microsoft.Storage/storageAccounts/devjanbatchadlsgen2"
+		},
+		"triggertumbling_properties_pipeline_parameters_Windowsstarttime": {
+			"value": "@trigger().outputs.windowStartTime"
+		},
+		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
+			"value": "@trigger().outputs.windowEndTime"
 		}
 	}
 }

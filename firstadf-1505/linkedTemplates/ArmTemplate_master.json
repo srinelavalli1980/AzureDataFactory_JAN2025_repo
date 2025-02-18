@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_metadata'"
 		},
+		"LS_INPUT_DF_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_INPUT_DF'"
+		},
 		"LS_Multi_file_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_Multi_file'"
@@ -44,6 +48,10 @@
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
 		},
+		"LS_HttpServer1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/"
+		},
 		"LS_Multi_file_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
@@ -71,6 +79,14 @@
 		"tr_storage_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/dab63fa7-b658-4f30-9c43-166248715acc/resourceGroups/Dattha/providers/Microsoft.Storage/storageAccounts/devjanbatchadlsgen2"
+		},
+		"triggertumbling_properties_pipeline_parameters_Windowsstarttime": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
 		},
 		"containerUri": {
 			"type": "string",
@@ -102,6 +118,9 @@
 					"LS_ADLS_metadata_accountKey": {
 						"value": "[parameters('LS_ADLS_metadata_accountKey')]"
 					},
+					"LS_INPUT_DF_connectionString": {
+						"value": "[parameters('LS_INPUT_DF_connectionString')]"
+					},
 					"LS_Multi_file_accountKey": {
 						"value": "[parameters('LS_Multi_file_accountKey')]"
 					},
@@ -119,6 +138,9 @@
 					},
 					"LS_ADLS_metadata_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADLS_metadata_properties_typeProperties_url')]"
+					},
+					"LS_HttpServer1_properties_typeProperties_url": {
+						"value": "[parameters('LS_HttpServer1_properties_typeProperties_url')]"
 					},
 					"LS_Multi_file_properties_typeProperties_url": {
 						"value": "[parameters('LS_Multi_file_properties_typeProperties_url')]"
@@ -152,15 +174,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"LS_Source_onprem_Sqlserver_connectionString": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_connectionString')]"
-					},
-					"LS_Source_onprem_Sqlserver_password": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_password')]"
-					},
-					"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -182,13 +195,68 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"tr_storage_properties_typeProperties_scope": {
-						"value": "[parameters('tr_storage_properties_typeProperties_scope')]"
+					"LS_Source_onprem_Sqlserver_connectionString": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_connectionString')]"
+					},
+					"LS_Source_onprem_Sqlserver_password": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_password')]"
+					},
+					"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_properties_typeProperties_userName')]"
 					}
 				}
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'firstadf-1505_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "firstadf-1505_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'firstadf-1505_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "firstadf-1505_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"tr_storage_properties_typeProperties_scope": {
+						"value": "[parameters('tr_storage_properties_typeProperties_scope')]"
+					},
+					"triggertumbling_properties_pipeline_parameters_Windowsstarttime": {
+						"value": "[parameters('triggertumbling_properties_pipeline_parameters_Windowsstarttime')]"
+					},
+					"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
+						"value": "[parameters('triggertumbling_properties_pipeline_parameters_Windowsendtime')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'firstadf-1505_ArmTemplate_3')]"
 			]
 		}
 	]
