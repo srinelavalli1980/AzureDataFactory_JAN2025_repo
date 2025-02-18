@@ -43,6 +43,9 @@
 				},
 				{
 					"name": "assertstream"
+				},
+				{
+					"name": "alterRow1stream"
 				}
 			],
 			"scriptLines": [
@@ -80,7 +83,8 @@
 				"          min = min({Rotten Tomato}),",
 				"          count = count({Rotten Tomato})) ~> aggregatestreem",
 				"aggregatestreem assert(expectTrue(year>1920, false, 'assert1', null, 'Validate year greater than 1950')) ~> assertstream",
-				"assertstream sink(allowSchemaDrift: false,",
+				"assertstream alterRow(insertIf(true())) ~> alterRow1stream",
+				"alterRow1stream sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -95,7 +99,15 @@
 				"     reportSuccessOnError: false,",
 				"     outputAssertFailedRows: true,",
 				"     assertFailure_container: 'error-log',",
-				"     ignoreAssertFailedRows: true) ~> sink1stream"
+				"     ignoreAssertFailedRows: true,",
+				"     mapColumn(",
+				"          year,",
+				"          Primery_genres,",
+				"          avg,",
+				"          max,",
+				"          min,",
+				"          count",
+				"     )) ~> sink1stream"
 			]
 		}
 	}
