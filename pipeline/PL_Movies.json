@@ -19,8 +19,11 @@
 						"referenceName": "DF_Moviedata_Activity",
 						"type": "DataFlowReference"
 					},
+					"staging": {
+						"folderPath": ""
+					},
 					"compute": {
-						"coreCount": 8,
+						"coreCount": 16,
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
