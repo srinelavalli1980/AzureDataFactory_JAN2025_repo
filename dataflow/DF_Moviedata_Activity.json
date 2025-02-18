@@ -1,0 +1,112 @@
+{
+	"name": "DF_Moviedata_Activity",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Moviedata",
+						"type": "DatasetReference"
+					},
+					"name": "sourceofMoviedata"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_cloudDBA",
+						"type": "DatasetReference"
+					},
+					"name": "sink1stream",
+					"rejectedDataLinkedService": {
+						"referenceName": "LS_attach_file",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectMovie"
+				},
+				{
+					"name": "filter1movie"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "rankstream"
+				},
+				{
+					"name": "aggregatestreem"
+				},
+				{
+					"name": "assertstream"
+				},
+				{
+					"name": "alterRow1stream"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          movie as string,",
+				"          title as string,",
+				"          genres as string,",
+				"          year as integer,",
+				"          Rating as short,",
+				"          {Rotton Tomato} as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['moviefile','archive']) ~> sourceofMoviedata",
+				"sourceofMoviedata select(mapColumn(",
+				"          movie,",
+				"          title,",
+				"          genres,",
+				"          year,",
+				"          {Rotten Tomato} = {Rotton Tomato}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectMovie",
+				"selectMovie filter(year>1910 && year<2000) ~> filter1movie",
+				"filter1movie derive(Primery_genres = iif(instr(genres,'|') > 0, substring(genres,1,instr(genres,'|')-1), genres)) ~> derivedColumn1",
+				"derivedColumn1 window(over(year,",
+				"          Primery_genres),",
+				"     desc({Rotten Tomato}, true),",
+				"     rank = rank()) ~> rankstream",
+				"rankstream aggregate(groupBy(year,",
+				"          Primery_genres),",
+				"     avg = avg({Rotten Tomato}),",
+				"          max = max({Rotten Tomato}),",
+				"          min = min({Rotten Tomato}),",
+				"          count = count({Rotten Tomato})) ~> aggregatestreem",
+				"aggregatestreem assert(expectTrue(year>1920, false, 'assert1', null, 'Validate year greater than 1950')) ~> assertstream",
+				"assertstream alterRow(insertIf(true())) ~> alterRow1stream",
+				"alterRow1stream sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     outputAssertFailedRows: true,",
+				"     assertFailure_container: 'error-log',",
+				"     ignoreAssertFailedRows: true,",
+				"     mapColumn(",
+				"          year,",
+				"          Primery_genres,",
+				"          avg,",
+				"          max,",
+				"          min,",
+				"          count",
+				"     )) ~> sink1stream"
+			]
+		}
+	}
+}

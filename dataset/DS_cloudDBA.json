@@ -1,0 +1,16 @@
+{
+	"name": "DS_cloudDBA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDBA_mini",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": "movies"
+		}
+	}
+}
