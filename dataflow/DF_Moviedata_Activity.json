@@ -22,6 +22,15 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "rankstream"
+				},
+				{
+					"name": "aggregatestreem"
+				},
+				{
+					"name": "assertstream"
 				}
 			],
 			"scriptLines": [
@@ -47,7 +56,18 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> selectMovie",
 				"selectMovie filter(year>1910 && year<2000) ~> filter1movie",
-				"filter1movie derive(Primery_genres = iif(instr(genres,'|') > 0, substring(genres,1,instr(genres,'|')-1), genres)) ~> derivedColumn1"
+				"filter1movie derive(Primery_genres = iif(instr(genres,'|') > 0, substring(genres,1,instr(genres,'|')-1), genres)) ~> derivedColumn1",
+				"derivedColumn1 window(over(year,",
+				"          Primery_genres),",
+				"     desc({Rotten Tomato}, true),",
+				"     rank = rank()) ~> rankstream",
+				"rankstream aggregate(groupBy(year,",
+				"          Primery_genres),",
+				"     avg = avg({Rotten Tomato}),",
+				"          max = max({Rotten Tomato}),",
+				"          min = min({Rotten Tomato}),",
+				"          count = count({Rotten Tomato})) ~> aggregatestreem",
+				"aggregatestreem assert(expectTrue(year>1920, false, 'assert1', null, 'Validate year greater than 1950')) ~> assertstream"
 			]
 		}
 	}
