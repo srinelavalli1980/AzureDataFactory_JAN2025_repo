@@ -1,0 +1,75 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "firstadf-1505"
+		},
+		"LS_ADLS_metadata_accountKey": {
+			"value": ""
+		},
+		"LS_INPUT_DF_connectionString": {
+			"value": ""
+		},
+		"LS_Multi_file_accountKey": {
+			"value": ""
+		},
+		"LS_SQLDBA_mini_password": {
+			"value": ""
+		},
+		"LS_Source_onprem_Sqlserver_connectionString": {
+			"value": "integrated security=True;Data Source=DESKTOP-NUVB7F9\\SQLEXPRESS;Initial Catalog=devjan"
+		},
+		"LS_Source_onprem_Sqlserver_password": {
+			"value": ""
+		},
+		"LS_TGT_Cloud_Sqlserver_connectionString": {
+			"value": ""
+		},
+		"LS_attach_file_connectionString": {
+			"value": ""
+		},
+		"LS_log_json_accountKey": {
+			"value": ""
+		},
+		"LS_ADLS_metadata_properties_typeProperties_url": {
+			"value": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_HttpServer1_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/"
+		},
+		"LS_Multi_file_properties_typeProperties_url": {
+			"value": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_SQLDBA_mini_properties_typeProperties_server": {
+			"value": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_mini_properties_typeProperties_database": {
+			"value": "jan-azure-db"
+		},
+		"LS_SQLDBA_mini_properties_typeProperties_userName": {
+			"value": "adminuser"
+		},
+		"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
+			"value": "DESKTOP-NUVB7F9\\SRINIVASARAO"
+		},
+		"LS_log_json_properties_typeProperties_url": {
+			"value": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"tr_storage_properties_typeProperties_scope": {
+			"value": "/subscriptions/dab63fa7-b658-4f30-9c43-166248715acc/resourceGroups/Dattha/providers/Microsoft.Storage/storageAccounts/devjanbatchadlsgen2"
+		},
+		"triggertumbling_properties_pipeline_parameters_Windowsstarttime": {
+			"value": "@trigger().outputs.windowStartTime"
+		},
+		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
+			"value": "@trigger().outputs.windowEndTime"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
