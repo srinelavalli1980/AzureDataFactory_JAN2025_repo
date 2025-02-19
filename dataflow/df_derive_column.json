@@ -1,0 +1,35 @@
+{
+	"name": "df_derive_column",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_SRC_DC",
+						"type": "DatasetReference"
+					},
+					"name": "source1derivecol"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Row as integer,",
+				"          Country as string,",
+				"          Sales as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1derivecol",
+				"source1derivecol derive(year = replace(substring(Country, instr(Country,'(') +1 , length(trim(Country))-2),')',''),",
+				"          country = toString(left(Country,length(Country)-6))) ~> derivedColumn1"
+			]
+		}
+	}
+}
