@@ -1,0 +1,23 @@
+{
+	"name": "DS_Default",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_INPUT_DF",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "sink3.csv",
+				"container": "sinkdataflow"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
