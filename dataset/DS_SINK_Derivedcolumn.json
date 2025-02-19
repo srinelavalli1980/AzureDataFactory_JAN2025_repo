@@ -1,0 +1,23 @@
+{
+	"name": "DS_SINK_Derivedcolumn",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_metadata",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "derivedcolumn.csv",
+				"fileSystem": "sinkdataflow"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

@@ -12,7 +12,15 @@
 					"name": "source1derivecol"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_SINK_Derivedcolumn",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -28,7 +36,16 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1derivecol",
 				"source1derivecol derive(year = replace(substring(Country, instr(Country,'(') +1 , length(trim(Country))-2),')',''),",
-				"          country = toString(left(Country,length(Country)-6))) ~> derivedColumn1"
+				"          country = toString(left(Country,length(Country)-6))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['derivedcolumn.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
