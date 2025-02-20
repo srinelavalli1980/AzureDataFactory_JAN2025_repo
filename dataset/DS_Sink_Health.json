@@ -5,13 +5,18 @@
 			"referenceName": "LS_ADLS_metadata",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"SinkFileName": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@item().SinkFile",
+					"value": "@dataset().SinkFileName",
 					"type": "Expression"
 				},
 				"folderPath": "outbound",
