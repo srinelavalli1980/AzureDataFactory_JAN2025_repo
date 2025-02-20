@@ -1,0 +1,20 @@
+{
+	"name": "DS_Config_Health",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Config_Health",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Health_Metadata.json",
+				"folderPath": "input",
+				"container": "healthcare"
+			}
+		},
+		"schema": {}
+	}
+}
