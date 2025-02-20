@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Moviesdata.json",
+				"fileName": "Health_Metadata.json",
 				"folderPath": "input",
 				"fileSystem": "healthcare"
 			}
