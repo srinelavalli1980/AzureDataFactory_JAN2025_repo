@@ -1,0 +1,41 @@
+{
+	"name": "DS_Source_from_http",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Http_Parameter",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"BaseUrl": {
+					"value": "@dataset().BaseURL",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"BaseURL": {
+				"type": "string"
+			},
+			"RelativeUrl": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().RelativeUrl",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": "Comma (,)",
+			"rowDelimiter": "Default (\r,\n, or \r\n)",
+			"encodingName": "Default(UTF-8)",
+			"escapeChar": "Backslash (\\)",
+			"firstRowAsHeader": true,
+			"quoteChar": "Double quote (\")"
+		},
+		"schema": []
+	}
+}
