@@ -50,7 +50,11 @@
 				"inputs": [
 					{
 						"referenceName": "DS_Http_Source_csv",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"SourceBaseUrl": "https://raw.githubusercontent.com",
+							"SourceRelativeUrl": "akjainade/akjain-adf/master/moviesDB.csv"
+						}
 					}
 				],
 				"outputs": [
