@@ -77,7 +77,8 @@
 								"sink": {
 									"type": "DelimitedTextSink",
 									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
+										"type": "AzureBlobFSWriteSettings",
+										"copyBehavior": "PreserveHierarchy"
 									},
 									"formatSettings": {
 										"type": "DelimitedTextWriteSettings",
@@ -102,6 +103,10 @@
 									"parameters": {
 										"BaseURL": {
 											"value": "@item().SourceBaseUrl",
+											"type": "Expression"
+										},
+										"RelativeUrl": {
+											"value": "@item().SourceRelativeUrl",
 											"type": "Expression"
 										}
 									}
