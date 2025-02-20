@@ -1,0 +1,20 @@
+{
+	"name": "DS_Config_read",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_log_json",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Health_Metadata.json",
+				"folderPath": "input",
+				"fileSystem": "healthcare"
+			}
+		},
+		"schema": {}
+	}
+}
