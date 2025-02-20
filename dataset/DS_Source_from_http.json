@@ -30,7 +30,6 @@
 				}
 			},
 			"columnDelimiter": "Comma (,)",
-			"rowDelimiter": "Default (\r,\n, or \r\n)",
 			"encodingName": "Default(UTF-8)",
 			"escapeChar": "Backslash (\\)",
 			"firstRowAsHeader": true,
