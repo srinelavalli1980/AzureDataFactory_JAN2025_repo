@@ -1,0 +1,14 @@
+{
+	"name": "DF_Mapping",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				""
+			]
+		}
+	}
+}
