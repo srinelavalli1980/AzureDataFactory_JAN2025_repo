@@ -27,7 +27,7 @@
 						}
 					},
 					"dataset": {
-						"referenceName": "DS_Json_Movie",
+						"referenceName": "DS_Json_Healthcare",
 						"type": "DatasetReference"
 					},
 					"firstRowOnly": false

@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup Moviefile",
+				"name": "Lookup Healthcare",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -27,7 +27,7 @@
 						}
 					},
 					"dataset": {
-						"referenceName": "DS_Json_Movie",
+						"referenceName": "DS_Json_Healthcare",
 						"type": "DatasetReference"
 					},
 					"firstRowOnly": false
@@ -38,7 +38,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup Moviefile",
+						"activity": "Lookup Healthcare",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -47,7 +47,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup Moviefile').output.value",
+						"value": "@activity('Lookup Healthcare').output.value",
 						"type": "Expression"
 					},
 					"activities": [

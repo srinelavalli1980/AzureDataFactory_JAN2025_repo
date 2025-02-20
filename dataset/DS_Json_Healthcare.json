@@ -1,5 +1,5 @@
 {
-	"name": "DS_Json_Movie",
+	"name": "DS_Json_Healthcare",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_log_json",
