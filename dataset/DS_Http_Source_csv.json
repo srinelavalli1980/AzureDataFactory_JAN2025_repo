@@ -1,0 +1,39 @@
+{
+	"name": "DS_Http_Source_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Http_Parameter",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"BaseUrl": {
+					"value": "@dataset().SourceBaseUrl",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"SourceBaseUrl": {
+				"type": "string"
+			},
+			"SourceRelativeUrl": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().SourceRelativeUrl",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

@@ -49,7 +49,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_HTTP_File",
+						"referenceName": "DS_Http_Source_csv",
 						"type": "DatasetReference"
 					}
 				],
