@@ -2,15 +2,32 @@
 	"name": "DS_HTTP_File",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_HttpServer1",
-			"type": "LinkedServiceReference"
+			"referenceName": "LS_Http_Source_parameter",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"BaseUrl": {
+					"value": "@dataset().SourceBaseUrl",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"SourceBaseUrl": {
+				"type": "string"
+			},
+			"SourceRelativeUrl": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
-				"relativeUrl": "akjainade/akjain-adf/master/moviesDB.csv"
+				"relativeUrl": {
+					"value": "@dataset().SourceRelativeUrl",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

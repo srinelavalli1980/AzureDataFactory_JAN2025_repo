@@ -1,0 +1,28 @@
+{
+	"name": "DS_Sink_Movies",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_metadata",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SinkFileName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "outbound",
+				"fileSystem": "healthcare"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

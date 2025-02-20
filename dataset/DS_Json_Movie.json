@@ -1,0 +1,33 @@
+{
+	"name": "DS_Json_Movie",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_log_json",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Moviesdata.json",
+				"folderPath": "input",
+				"fileSystem": "healthcare"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"SourceBaseUrl": {
+					"type": "string"
+				},
+				"SourceRelativeUrl": {
+					"type": "string"
+				},
+				"SinkFile": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
