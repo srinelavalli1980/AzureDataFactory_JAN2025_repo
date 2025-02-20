@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Health_Metadata.json",
+				"fileName": "ecdc_file_list.json",
 				"folderPath": "input",
 				"fileSystem": "healthcare"
 			}
