@@ -1,17 +1,6 @@
 {
 	"name": "PL_Healthcare",
 	"properties": {
-		"variables": {
-			"BaseUrl": {
-				"type": "String"
-			},
-			"RelativeUrl": {
-				"type": "String"
-			},
-			"SinkFileName": {
-				"type": "String"
-			}
-		},
 		"annotations": []
 	}
 }
