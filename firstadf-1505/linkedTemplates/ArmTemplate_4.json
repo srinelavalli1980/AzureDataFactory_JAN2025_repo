@@ -986,6 +986,147 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_HTTP_Health_2002')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup Healthcare",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "DS_Json_Healthcare",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach record",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup Healthcare",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup Healthcare').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data Movies",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "HttpReadSettings",
+												"requestMethod": "GET"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings",
+												"copyBehavior": "FlattenHierarchy"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".csv"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_HTTP_File",
+											"type": "DatasetReference",
+											"parameters": {
+												"SourceBaseUrl": {
+													"value": "@item().SourceBaseUrl",
+													"type": "Expression"
+												},
+												"SourceRelativeUrl": {
+													"value": "@item().SourceRelativeUrl",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_Sink_Movies",
+											"type": "DatasetReference",
+											"parameters": {
+												"SinkFileName": {
+													"value": "@item().sinkFileName",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_HTTP_MovieFile')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1016,7 +1157,7 @@
 								}
 							},
 							"dataset": {
-								"referenceName": "DS_Json_Movie",
+								"referenceName": "DS_Json_Healthcare",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -4053,83 +4194,6 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     partitionBy('hash', 1)) ~> sinksales"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DF_InnerJoin')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DS_Sales_Join",
-								"type": "DatasetReference"
-							},
-							"name": "Salesjoin"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_customer_join",
-								"type": "DatasetReference"
-							},
-							"name": "customer"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "DS_Sink_InnerJoin",
-								"type": "DatasetReference"
-							},
-							"name": "SinkInnerJoin"
-						}
-					],
-					"transformations": [
-						{
-							"name": "innerjoin"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          SaleID as short,",
-						"          { CustomerID} as integer,",
-						"          { SaleDate} as string,",
-						"          { ProductID} as short,",
-						"          { Quantity} as short,",
-						"          { UnitPrice} as double,",
-						"          { TotalAmount} as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> Salesjoin",
-						"source(output(",
-						"          CustomerID as integer,",
-						"          { CustomerName} as string,",
-						"          { Email} as string,",
-						"          { Phone} as string,",
-						"          { Address} as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> customer",
-						"Salesjoin, customer join({ CustomerID} == CustomerID,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> innerjoin",
-						"innerjoin sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     partitionFileNames:['Salesjoincustomer.csv'],",
-						"     truncate: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     partitionBy('hash', 1)) ~> SinkInnerJoin"
 					]
 				}
 			},

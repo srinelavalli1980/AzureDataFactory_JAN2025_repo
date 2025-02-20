@@ -489,7 +489,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_Json_Movie')]",
+			"name": "[concat(parameters('factoryName'), '/DS_Json_Healthcare')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -502,7 +502,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "Moviesdata.json",
+						"fileName": "Health_Metadata.json",
 						"folderPath": "input",
 						"fileSystem": "healthcare"
 					}

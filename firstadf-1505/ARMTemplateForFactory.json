@@ -3179,6 +3179,151 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_HTTP_Health_2002')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup Healthcare",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "DS_Json_Healthcare",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach record",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup Healthcare",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup Healthcare').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data Movies",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "HttpReadSettings",
+												"requestMethod": "GET"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings",
+												"copyBehavior": "FlattenHierarchy"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".csv"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_HTTP_File",
+											"type": "DatasetReference",
+											"parameters": {
+												"SourceBaseUrl": {
+													"value": "@item().SourceBaseUrl",
+													"type": "Expression"
+												},
+												"SourceRelativeUrl": {
+													"value": "@item().SourceRelativeUrl",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_Sink_Movies",
+											"type": "DatasetReference",
+											"parameters": {
+												"SinkFileName": {
+													"value": "@item().sinkFileName",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Json_Healthcare')]",
+				"[concat(variables('factoryId'), '/datasets/DS_HTTP_File')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Sink_Movies')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_HTTP_MovieFile')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -3209,7 +3354,7 @@
 								}
 							},
 							"dataset": {
-								"referenceName": "DS_Json_Movie",
+								"referenceName": "DS_Json_Healthcare",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -3318,7 +3463,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_Json_Movie')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Json_Healthcare')]",
 				"[concat(variables('factoryId'), '/datasets/DS_HTTP_File')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Sink_Movies')]"
 			]
@@ -6834,7 +6979,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_Json_Movie')]",
+			"name": "[concat(parameters('factoryName'), '/DS_Json_Healthcare')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -6847,7 +6992,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "Moviesdata.json",
+						"fileName": "Health_Metadata.json",
 						"folderPath": "input",
 						"fileSystem": "healthcare"
 					}

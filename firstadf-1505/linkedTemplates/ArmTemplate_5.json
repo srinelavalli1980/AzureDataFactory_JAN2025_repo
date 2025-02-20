@@ -13,6 +13,83 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/DF_InnerJoin')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Sales_Join",
+								"type": "DatasetReference"
+							},
+							"name": "Salesjoin"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_customer_join",
+								"type": "DatasetReference"
+							},
+							"name": "customer"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Sink_InnerJoin",
+								"type": "DatasetReference"
+							},
+							"name": "SinkInnerJoin"
+						}
+					],
+					"transformations": [
+						{
+							"name": "innerjoin"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          SaleID as short,",
+						"          { CustomerID} as integer,",
+						"          { SaleDate} as string,",
+						"          { ProductID} as short,",
+						"          { Quantity} as short,",
+						"          { UnitPrice} as double,",
+						"          { TotalAmount} as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Salesjoin",
+						"source(output(",
+						"          CustomerID as integer,",
+						"          { CustomerName} as string,",
+						"          { Email} as string,",
+						"          { Phone} as string,",
+						"          { Address} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> customer",
+						"Salesjoin, customer join({ CustomerID} == CustomerID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> innerjoin",
+						"innerjoin sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['Salesjoincustomer.csv'],",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> SinkInnerJoin"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DF_Moviedata_Activity')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1605,7 +1682,9 @@
 				"annotations": [],
 				"lastPublishTime": "2025-02-16T07:06:53Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_InnerJoin')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_Movies')]",
@@ -1651,52 +1730,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DF_Moviedata_Activity')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Pivot')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Pivot",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Pivot",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1Pivot": {},
-									"sink1pivot": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Pivot')]"
 			]
 		}
 	]
