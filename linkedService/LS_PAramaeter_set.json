@@ -3,7 +3,7 @@
 	"properties": {
 		"parameters": {
 			"BaseURL": {
-				"type": "string"
+				"type": "array"
 			}
 		},
 		"annotations": [],
