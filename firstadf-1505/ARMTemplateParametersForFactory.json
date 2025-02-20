@@ -8,10 +8,22 @@
 		"LS_ADLS_metadata_accountKey": {
 			"value": ""
 		},
+		"LS_Config_Health_connectionString": {
+			"value": ""
+		},
 		"LS_INPUT_DF_connectionString": {
 			"value": ""
 		},
 		"LS_Multi_file_accountKey": {
+			"value": ""
+		},
+		"LS_Out_health_accountKey": {
+			"value": ""
+		},
+		"LS_SINK_DATA_password": {
+			"value": ""
+		},
+		"LS_SQLDBA_Dev_password": {
 			"value": ""
 		},
 		"LS_SQLDBA_mini_password": {
@@ -29,6 +41,9 @@
 		"LS_attach_file_connectionString": {
 			"value": ""
 		},
+		"LS_health_connectionString": {
+			"value": ""
+		},
 		"LS_log_json_accountKey": {
 			"value": ""
 		},
@@ -38,8 +53,44 @@
 		"LS_HttpServer1_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/"
 		},
+		"LS_Http_Movie_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseUrl}"
+		},
+		"LS_Http_Parameter_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseUrl}"
+		},
+		"LS_Http_Source_properties_typeProperties_url": {
+			"value": "@{linkedService().SourceBaseUrl}"
+		},
+		"LS_Http_Source_parameter_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseUrl}"
+		},
 		"LS_Multi_file_properties_typeProperties_url": {
 			"value": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_Out_health_properties_typeProperties_url": {
+			"value": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_PAramaeter_set_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseURL}"
+		},
+		"LS_SINK_DATA_properties_typeProperties_server": {
+			"value": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SINK_DATA_properties_typeProperties_database": {
+			"value": "dev-ss-test"
+		},
+		"LS_SINK_DATA_properties_typeProperties_userName": {
+			"value": "adminuser"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_server": {
+			"value": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_database": {
+			"value": "dev-ss-test"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_userName": {
+			"value": "adminuser"
 		},
 		"LS_SQLDBA_mini_properties_typeProperties_server": {
 			"value": "jan-batch-sql-server.database.windows.net"

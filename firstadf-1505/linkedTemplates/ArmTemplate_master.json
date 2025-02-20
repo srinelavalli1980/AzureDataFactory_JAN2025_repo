@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_metadata'"
 		},
+		"LS_Config_Health_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Config_Health'"
+		},
 		"LS_INPUT_DF_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_INPUT_DF'"
@@ -18,6 +22,18 @@
 		"LS_Multi_file_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_Multi_file'"
+		},
+		"LS_Out_health_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_Out_health'"
+		},
+		"LS_SINK_DATA_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SINK_DATA'"
+		},
+		"LS_SQLDBA_Dev_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLDBA_Dev'"
 		},
 		"LS_SQLDBA_mini_password": {
 			"type": "secureString",
@@ -40,6 +56,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_attach_file'"
 		},
+		"LS_health_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_health'"
+		},
 		"LS_log_json_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_log_json'"
@@ -52,9 +72,57 @@
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/"
 		},
+		"LS_Http_Movie_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseUrl}"
+		},
+		"LS_Http_Parameter_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseUrl}"
+		},
+		"LS_Http_Source_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().SourceBaseUrl}"
+		},
+		"LS_Http_Source_parameter_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseUrl}"
+		},
 		"LS_Multi_file_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_Out_health_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_PAramaeter_set_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseURL}"
+		},
+		"LS_SINK_DATA_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SINK_DATA_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "dev-ss-test"
+		},
+		"LS_SINK_DATA_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "dev-ss-test"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
 		},
 		"LS_SQLDBA_mini_properties_typeProperties_server": {
 			"type": "string",
@@ -118,11 +186,23 @@
 					"LS_ADLS_metadata_accountKey": {
 						"value": "[parameters('LS_ADLS_metadata_accountKey')]"
 					},
+					"LS_Config_Health_connectionString": {
+						"value": "[parameters('LS_Config_Health_connectionString')]"
+					},
 					"LS_INPUT_DF_connectionString": {
 						"value": "[parameters('LS_INPUT_DF_connectionString')]"
 					},
 					"LS_Multi_file_accountKey": {
 						"value": "[parameters('LS_Multi_file_accountKey')]"
+					},
+					"LS_Out_health_accountKey": {
+						"value": "[parameters('LS_Out_health_accountKey')]"
+					},
+					"LS_SINK_DATA_password": {
+						"value": "[parameters('LS_SINK_DATA_password')]"
+					},
+					"LS_SQLDBA_Dev_password": {
+						"value": "[parameters('LS_SQLDBA_Dev_password')]"
 					},
 					"LS_SQLDBA_mini_password": {
 						"value": "[parameters('LS_SQLDBA_mini_password')]"
@@ -133,6 +213,9 @@
 					"LS_attach_file_connectionString": {
 						"value": "[parameters('LS_attach_file_connectionString')]"
 					},
+					"LS_health_connectionString": {
+						"value": "[parameters('LS_health_connectionString')]"
+					},
 					"LS_log_json_accountKey": {
 						"value": "[parameters('LS_log_json_accountKey')]"
 					},
@@ -142,8 +225,44 @@
 					"LS_HttpServer1_properties_typeProperties_url": {
 						"value": "[parameters('LS_HttpServer1_properties_typeProperties_url')]"
 					},
+					"LS_Http_Movie_properties_typeProperties_url": {
+						"value": "[parameters('LS_Http_Movie_properties_typeProperties_url')]"
+					},
+					"LS_Http_Parameter_properties_typeProperties_url": {
+						"value": "[parameters('LS_Http_Parameter_properties_typeProperties_url')]"
+					},
+					"LS_Http_Source_properties_typeProperties_url": {
+						"value": "[parameters('LS_Http_Source_properties_typeProperties_url')]"
+					},
+					"LS_Http_Source_parameter_properties_typeProperties_url": {
+						"value": "[parameters('LS_Http_Source_parameter_properties_typeProperties_url')]"
+					},
 					"LS_Multi_file_properties_typeProperties_url": {
 						"value": "[parameters('LS_Multi_file_properties_typeProperties_url')]"
+					},
+					"LS_Out_health_properties_typeProperties_url": {
+						"value": "[parameters('LS_Out_health_properties_typeProperties_url')]"
+					},
+					"LS_PAramaeter_set_properties_typeProperties_url": {
+						"value": "[parameters('LS_PAramaeter_set_properties_typeProperties_url')]"
+					},
+					"LS_SINK_DATA_properties_typeProperties_server": {
+						"value": "[parameters('LS_SINK_DATA_properties_typeProperties_server')]"
+					},
+					"LS_SINK_DATA_properties_typeProperties_database": {
+						"value": "[parameters('LS_SINK_DATA_properties_typeProperties_database')]"
+					},
+					"LS_SINK_DATA_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SINK_DATA_properties_typeProperties_userName')]"
+					},
+					"LS_SQLDBA_Dev_properties_typeProperties_server": {
+						"value": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_server')]"
+					},
+					"LS_SQLDBA_Dev_properties_typeProperties_database": {
+						"value": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_database')]"
+					},
+					"LS_SQLDBA_Dev_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_userName')]"
 					},
 					"LS_SQLDBA_mini_properties_typeProperties_server": {
 						"value": "[parameters('LS_SQLDBA_mini_properties_typeProperties_server')]"
@@ -194,15 +313,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"LS_Source_onprem_Sqlserver_connectionString": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_connectionString')]"
-					},
-					"LS_Source_onprem_Sqlserver_password": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_password')]"
-					},
-					"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -223,6 +333,15 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"LS_Source_onprem_Sqlserver_connectionString": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_connectionString')]"
+					},
+					"LS_Source_onprem_Sqlserver_password": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_password')]"
+					},
+					"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -243,6 +362,46 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'firstadf-1505_ArmTemplate_3')]"
+			]
+		},
+		{
+			"name": "firstadf-1505_ArmTemplate_5",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'firstadf-1505_ArmTemplate_4')]"
+			]
+		},
+		{
+			"name": "firstadf-1505_ArmTemplate_6",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_6.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"tr_storage_properties_typeProperties_scope": {
 						"value": "[parameters('tr_storage_properties_typeProperties_scope')]"
@@ -256,7 +415,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'firstadf-1505_ArmTemplate_3')]"
+				"[resourceId('Microsoft.Resources/deployments', 'firstadf-1505_ArmTemplate_5')]"
 			]
 		}
 	]
