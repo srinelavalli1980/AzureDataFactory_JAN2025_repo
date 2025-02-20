@@ -12,10 +12,10 @@
 			}
 		},
 		"parameters": {
-			"SourceBaseUrl": {
+			"SourceRelativeUrl": {
 				"type": "string"
 			},
-			"SourceRelativeUrl": {
+			"SourceBaseUrl": {
 				"type": "string"
 			}
 		},

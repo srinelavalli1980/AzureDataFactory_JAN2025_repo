@@ -101,11 +101,11 @@
 									"referenceName": "DS_DATSET",
 									"type": "DatasetReference",
 									"parameters": {
-										"SourceBaseUrl": {
+										"SourceRelativeUrl": {
 											"value": "@item().SourceBaseUrl",
 											"type": "Expression"
 										},
-										"SourceRelativeUrl": {
+										"SourceBaseUrl": {
 											"value": "@item().SourceRelativeUrl",
 											"type": "Expression"
 										}
