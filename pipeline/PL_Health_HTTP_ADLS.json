@@ -98,15 +98,11 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "DS_Source_from_http",
+									"referenceName": "DS_DATSET",
 									"type": "DatasetReference",
 									"parameters": {
-										"BaseURL": {
+										"SourceBaseUrl": {
 											"value": "@item().SourceBaseUrl",
-											"type": "Expression"
-										},
-										"RelativeUrl": {
-											"value": "@item().SourceRelativeUrl",
 											"type": "Expression"
 										}
 									}
