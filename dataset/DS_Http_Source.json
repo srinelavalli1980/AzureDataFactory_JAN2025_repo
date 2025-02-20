@@ -2,8 +2,14 @@
 	"name": "DS_Http_Source",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_Http_Source",
-			"type": "LinkedServiceReference"
+			"referenceName": "HttpServer1",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"BaseURL": {
+					"value": "@dataset().SourceBaseUrl",
+					"type": "Expression"
+				}
+			}
 		},
 		"parameters": {
 			"SourceBaseUrl": {
