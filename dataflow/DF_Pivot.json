@@ -12,8 +12,23 @@
 					"name": "source1Pivot"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Sink_pivot",
+						"type": "DatasetReference"
+					},
+					"name": "sink1pivot"
+				}
+			],
+			"transformations": [
+				{
+					"name": "pivot1transformation"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          ProductID as integer,",
@@ -37,7 +52,23 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1Pivot"
+				"     format: 'table') ~> source1Pivot",
+				"derivedColumn1 pivot(groupBy(Size),",
+				"     pivotBy(Color),",
+				"     avg = avg(StandardCost),",
+				"     columnNaming: '$N_$V_is calculated',",
+				"     lateral: true) ~> pivot1transformation",
+				"source1Pivot derive(Color = iif(isNull(Color) || Color == 'NULL', 'NA',Color),",
+				"          Size = iif(isNull(Size) || Size == 'NULL', 'NA',Size)) ~> derivedColumn1",
+				"pivot1transformation sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['PivotData.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1pivot"
 			]
 		}
 	}
