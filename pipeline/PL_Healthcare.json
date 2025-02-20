@@ -13,10 +13,7 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
-				"typeProperties": {
-					"firstRowOnly": false
-				}
+				"userProperties": []
 			}
 		],
 		"parameters": {
