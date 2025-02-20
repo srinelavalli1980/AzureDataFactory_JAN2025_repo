@@ -1,30 +1,15 @@
 {
 	"name": "PL_Healthcare",
 	"properties": {
-		"activities": [
-			{
-				"name": "Lookup1",
-				"type": "Lookup",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": []
-			}
-		],
-		"parameters": {
-			"SourceBaseURL": {
-				"type": "string"
+		"variables": {
+			"BaseUrl": {
+				"type": "String"
 			},
-			"SourceRelativeUrl": {
-				"type": "string"
+			"RelativeUrl": {
+				"type": "String"
 			},
-			"SinkName": {
-				"type": "string"
+			"SinkFileName": {
+				"type": "String"
 			}
 		},
 		"annotations": []
