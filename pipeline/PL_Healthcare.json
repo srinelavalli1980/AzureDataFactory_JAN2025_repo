@@ -52,7 +52,7 @@
 					},
 					"activities": [
 						{
-							"name": "Copy data1",
+							"name": "Copy data1 from HTTP to ADLS Gen2",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -64,8 +64,34 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
 								"enableStaging": false
-							}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Http_Source",
+									"type": "DatasetReference",
+									"parameters": {
+										"SourceBaseUrl": {
+											"value": "@item().SourceBaseUrl",
+											"type": "Expression"
+										},
+										"SourceRelativeUrl": {
+											"value": "@item().SourceRelativeUrl",
+											"type": "Expression"
+										}
+									}
+								}
+							]
 						}
 					]
 				}
