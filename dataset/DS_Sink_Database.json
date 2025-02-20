@@ -1,0 +1,15 @@
+{
+	"name": "DS_Sink_Database",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SINK_DATA",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"table": "Aggregation"
+		}
+	}
+}
