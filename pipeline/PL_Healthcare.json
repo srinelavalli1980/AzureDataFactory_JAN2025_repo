@@ -115,7 +115,13 @@
 							"outputs": [
 								{
 									"referenceName": "DS_Sink_Health",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"SinkFileName": {
+											"value": "@item().SinkFile",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
