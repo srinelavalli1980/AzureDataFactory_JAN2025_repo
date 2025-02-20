@@ -1,0 +1,17 @@
+{
+	"name": "LS_PAramaeter_set",
+	"properties": {
+		"parameters": {
+			"BaseURL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "@{linkedService().BaseURL}",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
