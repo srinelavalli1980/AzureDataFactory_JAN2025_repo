@@ -25,7 +25,11 @@
 						"referenceName": "DS_ONPREM_SINK_2102",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "LS_ADLS_metadata",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [
@@ -82,7 +86,12 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'allErrors',",
+				"     transactionCommit: 'single',",
+				"     reportSuccessOnError: false,",
+				"     outputAssertFailedRows: true,",
+				"     assertFailure_fileSystem: 'raw',",
+				"     assertFailure_folderPath: 'reject') ~> sink1"
 			]
 		}
 	}
