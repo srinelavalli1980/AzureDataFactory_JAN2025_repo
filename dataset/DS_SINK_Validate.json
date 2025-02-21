@@ -1,12 +1,12 @@
 {
-	"name": "DS_Source_validate",
+	"name": "DS_SINK_Validate",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_BLOB_Validate",
+			"referenceName": "LS_ADLS_metadata",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"Filename": {
+			"Filename_sink": {
 				"type": "string"
 			}
 		},
@@ -14,12 +14,12 @@
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
+				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@dataset().Filename",
+					"value": "@dataset().Filename_sink",
 					"type": "Expression"
 				},
-				"container": "storagecontainer"
+				"fileSystem": "sinkdataflow"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

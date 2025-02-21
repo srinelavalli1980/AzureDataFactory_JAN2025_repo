@@ -1,12 +1,12 @@
 {
-	"name": "DS_Source_validate",
+	"name": "DS_Lookup_data",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_BLOB_Validate",
+			"referenceName": "LS_INPUT_DF",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"Filename": {
+			"Lfile_name": {
 				"type": "string"
 			}
 		},
@@ -16,7 +16,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": {
-					"value": "@dataset().Filename",
+					"value": "@dataset().Lfile_name",
 					"type": "Expression"
 				},
 				"container": "storagecontainer"
