@@ -5,16 +5,12 @@
 			"referenceName": "LS_GetMetadata",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"Container": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation"
+				"type": "AzureBlobStorageLocation",
+				"container": "storagecontainer"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
