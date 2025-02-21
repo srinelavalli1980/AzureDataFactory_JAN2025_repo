@@ -86,7 +86,7 @@
 				"          ProductNumber,",
 				"          Shades = Color,",
 				"          StandardCost,",
-				"          Price = ListPrice,",
+				"          S1Price = ListPrice,",
 				"          Size,",
 				"          Weight,",
 				"          S1ProdCateID = source1@ProductCategoryID,",
