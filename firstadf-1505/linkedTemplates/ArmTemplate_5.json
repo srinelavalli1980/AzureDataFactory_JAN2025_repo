@@ -685,6 +685,9 @@
 					"transformations": [
 						{
 							"name": "join1"
+						},
+						{
+							"name": "select1"
 						}
 					],
 					"scriptLines": [
@@ -727,7 +730,33 @@
 						"     matchType:'exact',",
 						"     ignoreSpaces: false,",
 						"     broadcast: 'auto')~> join1",
-						"join1 sink(allowSchemaDrift: true,",
+						"join1 select(mapColumn(",
+						"          ProductID,",
+						"          Name = source1@Name,",
+						"          ProductNumber,",
+						"          Shades = Color,",
+						"          StandardCost,",
+						"          ListPrice,",
+						"          Size,",
+						"          Weight,",
+						"          ProductCategoryID = source1@ProductCategoryID,",
+						"          ProductModelID,",
+						"          SellStartDate,",
+						"          SellEndDate,",
+						"          DiscontinuedDate,",
+						"          ThumbNailPhoto,",
+						"          ThumbnailPhotoFileName,",
+						"          rowguid = source1@rowguid,",
+						"          ModifiedDate = source1@ModifiedDate,",
+						"          ProductCategoryID = source2@ProductCategoryID,",
+						"          ParentProductCategoryID,",
+						"          Name = source2@Name,",
+						"          rowguid = source2@rowguid,",
+						"          ModifiedDate = source2@ModifiedDate",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",
