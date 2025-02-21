@@ -1,0 +1,12 @@
+{
+	"name": "DS_SINK_SQLDBA_DF",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ONPREM_SQLDBA",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
