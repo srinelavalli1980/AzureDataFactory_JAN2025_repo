@@ -90,7 +90,7 @@
 				"          Size,",
 				"          Weight,",
 				"          S1ProdCateID = source1@ProductCategoryID,",
-				"          ProductModelID,",
+				"          S2ProdModelID = ProductModelID,",
 				"          SellStartDate,",
 				"          SellEndDate,",
 				"          ThumbNailPhoto,",
