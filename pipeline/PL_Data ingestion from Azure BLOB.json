@@ -1,0 +1,23 @@
+{
+	"name": "PL_Data ingestion from Azure BLOB",
+	"properties": {
+		"activities": [
+			{
+				"name": "Validation file",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_BLOB_Validate",
+						"type": "DatasetReference"
+					},
+					"timeout": "0.0:00:30",
+					"sleep": 10,
+					"childItems": false
+				}
+			}
+		],
+		"annotations": []
+	}
+}

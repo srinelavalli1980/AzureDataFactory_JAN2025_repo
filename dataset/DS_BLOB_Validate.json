@@ -1,0 +1,22 @@
+{
+	"name": "DS_BLOB_Validate",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_Validate",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "storagecontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
