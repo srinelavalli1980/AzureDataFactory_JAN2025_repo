@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_metadata'"
 		},
+		"LS_BLOB_Validate_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_BLOB_Validate'"
+		},
 		"LS_Config_Health_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_Config_Health'"
@@ -1880,6 +1884,37 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DF_Transformations_split')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Data ingestion from Azure BLOB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Validation file",
+						"type": "Validation",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_BLOB_Validate",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"timeout": "0.00:00:30",
+							"sleep": 10
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_BLOB_Validate')]"
 			]
 		},
 		{
@@ -6636,6 +6671,33 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_BLOB_Validate')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_BLOB_Validate",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "storagecontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_BLOB_Validate')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_ConditionalSplit')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -8848,6 +8910,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_BLOB_Validate')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_BLOB_Validate_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_Config_Health')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -9989,25 +10064,25 @@
 						"     ignoreSpaces: false,",
 						"     broadcast: 'auto')~> join1",
 						"join1 select(mapColumn(",
-						"          ProductID,",
-						"          S1Name = source1@Name,",
-						"          ProductNumber,",
+						"          S1ProdID = ProductID,",
+						"          s1Name = source1@Name,",
+						"          SProdNumber = ProductNumber,",
 						"          Shades = Color,",
 						"          StandardCost,",
-						"          Price = ListPrice,",
+						"          S1Price = ListPrice,",
 						"          Size,",
 						"          Weight,",
 						"          S1ProdCateID = source1@ProductCategoryID,",
-						"          ProductModelID,",
+						"          S2ProdModelID = ProductModelID,",
 						"          SellStartDate,",
 						"          SellEndDate,",
 						"          ThumbNailPhoto,",
 						"          ThumbnailPhotoFileName,",
 						"          S1rowguid = source1@rowguid,",
-						"          s1modidate = source1@ModifiedDate,",
+						"          samodidate = source1@ModifiedDate,",
 						"          S2ProduCategoryID = source2@ProductCategoryID,",
-						"          ProdCatID = ParentProductCategoryID,",
-						"          S2Name = source2@Name,",
+						"          S2ProdCatID = ParentProductCategoryID,",
+						"          s2Name = source2@Name,",
 						"          S2rowguid = source2@rowguid,",
 						"          s2modidate = source2@ModifiedDate",
 						"     ),",

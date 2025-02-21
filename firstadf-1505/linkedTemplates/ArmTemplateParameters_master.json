@@ -8,6 +8,9 @@
 		"LS_ADLS_metadata_accountKey": {
 			"value": ""
 		},
+		"LS_BLOB_Validate_connectionString": {
+			"value": ""
+		},
 		"LS_Config_Health_connectionString": {
 			"value": ""
 		},
