@@ -1,0 +1,16 @@
+{
+	"name": "LS_ONPREM_SQLDBA",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=DESKTOP-NUVB7F9\\SQLEXPRESS;initial catalog=devjan;user id=DESKTOP-NUVB7F9\\SRINIVASARAO",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJhYmQ3OTRkOS0zNDE2LTQ4MGUtYjlhNi04ZTMwNDQ0N2E0NDMiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "on-prem-shir",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
