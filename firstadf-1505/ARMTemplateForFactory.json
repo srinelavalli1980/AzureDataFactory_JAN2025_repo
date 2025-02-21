@@ -39,6 +39,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_SQLDBA_Dev'"
 		},
+		"LS_SQLDBA_SINK_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLDBA_SINK'"
+		},
 		"LS_SQLDBA_mini_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_SQLDBA_mini'"
@@ -67,10 +71,6 @@
 		"LS_log_json_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_log_json'"
-		},
-		"LS_SQLDBA_SINK_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_SQLDBA_SINK'"
 		},
 		"LS_ADLS_metadata_properties_typeProperties_url": {
 			"type": "string",
@@ -132,6 +132,18 @@
 			"type": "string",
 			"defaultValue": "adminuser"
 		},
+		"LS_SQLDBA_SINK_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "jan-azure-db"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
 		"LS_SQLDBA_mini_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "jan-batch-sql-server.database.windows.net"
@@ -163,18 +175,6 @@
 		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
 			"type": "string",
 			"defaultValue": "@trigger().outputs.windowEndTime"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "jan-batch-sql-server.database.windows.net"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "jan-azure-db"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "adminuser"
 		}
 	},
 	"variables": {
@@ -1784,6 +1784,54 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DF_Conditional_Split')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_DF_SQLJOIN')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "DF_SQLDBA_JOIN",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_SQLDBA_JOIN",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine",
+							"continueOnError": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_SQLDBA_JOIN')]"
 			]
 		},
 		{
@@ -7161,6 +7209,27 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_ONPREM_SINK_2102')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SQLDBA_SINK",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "",
+					"table": "PRODJOIN"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_SQLDBA_SINK')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_PARAMETER_FILE')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -9017,6 +9086,28 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_SQLDBA_SINK')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_server')]",
+					"database": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_SQLDBA_SINK_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_SQLDBA_mini')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -10243,61 +10334,6 @@
 				"typeProperties": {
 					"resourceId": "/subscriptions/dab63fa7-b658-4f30-9c43-166248715acc/resourceGroups/Dattha/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testuserassignedmanagement"
 				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_SQLDBA_SINK')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_server')]",
-					"database": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('LS_SQLDBA_SINK_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_ONPREM_SINK_2102')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_SQLDBA_SINK",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "",
-					"table": "PRODJOIN"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_SQLDBA_SINK')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
 			},
 			"dependsOn": []
 		}

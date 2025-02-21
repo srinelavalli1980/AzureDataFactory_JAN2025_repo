@@ -39,6 +39,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_SQLDBA_Dev'"
 		},
+		"LS_SQLDBA_SINK_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLDBA_SINK'"
+		},
 		"LS_SQLDBA_mini_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_SQLDBA_mini'"
@@ -67,10 +71,6 @@
 		"LS_log_json_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_log_json'"
-		},
-		"LS_SQLDBA_SINK_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_SQLDBA_SINK'"
 		},
 		"LS_ADLS_metadata_properties_typeProperties_url": {
 			"type": "string",
@@ -132,6 +132,18 @@
 			"type": "string",
 			"defaultValue": "adminuser"
 		},
+		"LS_SQLDBA_SINK_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "jan-azure-db"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
 		"LS_SQLDBA_mini_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "jan-batch-sql-server.database.windows.net"
@@ -163,18 +175,6 @@
 		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
 			"type": "string",
 			"defaultValue": "@trigger().outputs.windowEndTime"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "jan-batch-sql-server.database.windows.net"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "jan-azure-db"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "adminuser"
 		},
 		"containerUri": {
 			"type": "string",
@@ -224,6 +224,9 @@
 					"LS_SQLDBA_Dev_password": {
 						"value": "[parameters('LS_SQLDBA_Dev_password')]"
 					},
+					"LS_SQLDBA_SINK_password": {
+						"value": "[parameters('LS_SQLDBA_SINK_password')]"
+					},
 					"LS_SQLDBA_mini_password": {
 						"value": "[parameters('LS_SQLDBA_mini_password')]"
 					},
@@ -235,9 +238,6 @@
 					},
 					"LS_health_connectionString": {
 						"value": "[parameters('LS_health_connectionString')]"
-					},
-					"LS_log_json_accountKey": {
-						"value": "[parameters('LS_log_json_accountKey')]"
 					},
 					"LS_ADLS_metadata_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADLS_metadata_properties_typeProperties_url')]"
@@ -284,6 +284,15 @@
 					"LS_SQLDBA_Dev_properties_typeProperties_userName": {
 						"value": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_userName')]"
 					},
+					"LS_SQLDBA_SINK_properties_typeProperties_server": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_server')]"
+					},
+					"LS_SQLDBA_SINK_properties_typeProperties_database": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_database')]"
+					},
+					"LS_SQLDBA_SINK_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_userName')]"
+					},
 					"LS_SQLDBA_mini_properties_typeProperties_server": {
 						"value": "[parameters('LS_SQLDBA_mini_properties_typeProperties_server')]"
 					},
@@ -292,9 +301,6 @@
 					},
 					"LS_SQLDBA_mini_properties_typeProperties_userName": {
 						"value": "[parameters('LS_SQLDBA_mini_properties_typeProperties_userName')]"
-					},
-					"LS_log_json_properties_typeProperties_url": {
-						"value": "[parameters('LS_log_json_properties_typeProperties_url')]"
 					}
 				}
 			},
@@ -314,17 +320,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"LS_SQLDBA_SINK_password": {
-						"value": "[parameters('LS_SQLDBA_SINK_password')]"
+					"LS_log_json_accountKey": {
+						"value": "[parameters('LS_log_json_accountKey')]"
 					},
-					"LS_SQLDBA_SINK_properties_typeProperties_server": {
-						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_server')]"
-					},
-					"LS_SQLDBA_SINK_properties_typeProperties_database": {
-						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_database')]"
-					},
-					"LS_SQLDBA_SINK_properties_typeProperties_userName": {
-						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_userName')]"
+					"LS_log_json_properties_typeProperties_url": {
+						"value": "[parameters('LS_log_json_properties_typeProperties_url')]"
 					}
 				}
 			},
