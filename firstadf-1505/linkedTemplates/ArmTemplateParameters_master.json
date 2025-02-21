@@ -17,6 +17,9 @@
 		"LS_Multi_file_accountKey": {
 			"value": ""
 		},
+		"LS_ONPREM_SQLDBA_connectionString": {
+			"value": ""
+		},
 		"LS_Out_health_accountKey": {
 			"value": ""
 		},
@@ -45,6 +48,9 @@
 			"value": ""
 		},
 		"LS_log_json_accountKey": {
+			"value": ""
+		},
+		"LS_SQLDBA_SINK_password": {
 			"value": ""
 		},
 		"LS_ADLS_metadata_properties_typeProperties_url": {
@@ -115,6 +121,15 @@
 		},
 		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
 			"value": "@trigger().outputs.windowEndTime"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_server": {
+			"value": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_database": {
+			"value": "jan-azure-db"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_userName": {
+			"value": "adminuser"
 		},
 		"containerUri": {
 			"value": ""

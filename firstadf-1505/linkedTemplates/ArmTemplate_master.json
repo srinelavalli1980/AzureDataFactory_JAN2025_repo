@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_Multi_file'"
 		},
+		"LS_ONPREM_SQLDBA_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_ONPREM_SQLDBA'"
+		},
 		"LS_Out_health_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_Out_health'"
@@ -63,6 +67,10 @@
 		"LS_log_json_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_log_json'"
+		},
+		"LS_SQLDBA_SINK_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLDBA_SINK'"
 		},
 		"LS_ADLS_metadata_properties_typeProperties_url": {
 			"type": "string",
@@ -155,6 +163,18 @@
 		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
 			"type": "string",
 			"defaultValue": "@trigger().outputs.windowEndTime"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "jan-azure-db"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
 		},
 		"containerUri": {
 			"type": "string",
@@ -293,6 +313,18 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"LS_SQLDBA_SINK_password": {
+						"value": "[parameters('LS_SQLDBA_SINK_password')]"
+					},
+					"LS_SQLDBA_SINK_properties_typeProperties_server": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_server')]"
+					},
+					"LS_SQLDBA_SINK_properties_typeProperties_database": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_database')]"
+					},
+					"LS_SQLDBA_SINK_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -333,6 +365,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"LS_ONPREM_SQLDBA_connectionString": {
+						"value": "[parameters('LS_ONPREM_SQLDBA_connectionString')]"
 					},
 					"LS_Source_onprem_Sqlserver_connectionString": {
 						"value": "[parameters('LS_Source_onprem_Sqlserver_connectionString')]"

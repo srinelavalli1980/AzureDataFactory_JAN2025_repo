@@ -13,6 +13,1447 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_two_files_dianamic_mapping')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata bring file names",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_Source",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_folder": "triggerdata",
+									"container": "raw"
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"modifiedDatetimeStart": null,
+								"modifiedDatetimeEnd": null,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach file",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata bring file names",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata bring file names').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data dynamic",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true,
+												"modifiedDatetimeStart": null,
+												"modifiedDatetimeEnd": null,
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings",
+												"copyBehavior": "PreserveHierarchy"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".csv"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"value": "@if(contains(item().name,'sales'),pipeline().parameters.p_mapping1,pipeline().parameters.p_mapping2)",
+											"type": "Expression"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_Source",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_folder": "triggerdata",
+												"container": "raw"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_Source",
+											"type": "DatasetReference",
+											"parameters": {
+												"p_folder": "dianamic",
+												"container": "silver"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_mapping2": {
+						"type": "object",
+						"defaultValue": {
+							"type": "TabularTranslator",
+							"mappings": [
+								{
+									"source": {
+										"name": "ID",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ID",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Type",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Type",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "SKU",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "SKU",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Published",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Published",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Is featured?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Is featured?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Visibility in catalog",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Visibility in catalog",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Short description",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Short description",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Description",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Description",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Date sale price starts",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Date sale price starts",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Date sale price ends",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Date sale price ends",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Tax status",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Tax status",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Tax class",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Tax class",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "In stock?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "In stock?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Stock",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Stock",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Backorders allowed?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Backorders allowed?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Sold individually?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Sold individually?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Weight (lbs)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Weight (lbs)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Length (in)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Length (in)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Width (in)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Width (in)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Height (in)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Height (in)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Allow customer reviews?",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Allow customer reviews?",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Purchase note",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Purchase note",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Sale price",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Sale price",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Regular price",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Regular price",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Categories",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Categories",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Tags",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Tags",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Shipping class",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Shipping class",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Images",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Images",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download limit",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download limit",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download expiry days",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download expiry days",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Parent",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Parent",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Grouped products",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Grouped products",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Upsells",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Upsells",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Cross-sells",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Cross-sells",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "External URL",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "External URL",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Button text",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Button text",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Position",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Position",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 1 name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 1 name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 1 value(s)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 1 value(s)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 1 visible",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 1 visible",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 1 global",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 1 global",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 2 name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 2 name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 2 value(s)",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 2 value(s)",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 2 visible",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 2 visible",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Attribute 2 global",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Attribute 2 global",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Meta: _wpcom_is_markdown",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Meta: _wpcom_is_markdown",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download 1 name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download 1 name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download 1 URL",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download 1 URL",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download 2 name",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download 2 name",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "Download 2 URL",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "Download 2 URL",
+										"type": "String",
+										"physicalType": "String"
+									}
+								}
+							],
+							"typeConversion": true,
+							"typeConversionSettings": {
+								"allowDataTruncation": true,
+								"treatBooleanAsNumber": false
+							}
+						}
+					},
+					"p_mapping1": {
+						"type": "object",
+						"defaultValue": {
+							"type": "TabularTranslator",
+							"mappings": [
+								{
+									"source": {
+										"name": "ORDERNUMBER",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ORDERNUMBER",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "QUANTITYORDERED",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "QUANTITYORDERED",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "PRICEEACH",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "PRICEEACH",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "ORDERLINENUMBER",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ORDERLINENUMBER",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "SALES",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "SALES",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "ORDERDATE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ORDERDATE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "STATUS",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "STATUS",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "QTR_ID",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "QTR_ID",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "MONTH_ID",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "MONTH_ID",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "YEAR_ID",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "YEAR_ID",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "PRODUCTLINE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "PRODUCTLINE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "MSRP",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "MSRP",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "PRODUCTCODE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "PRODUCTCODE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "CUSTOMERNAME",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "CUSTOMERNAME",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "PHONE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "PHONE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "ADDRESSLINE1",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ADDRESSLINE1",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "ADDRESSLINE2",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "ADDRESSLINE2",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "CITY",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "CITY",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "STATE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "STATE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "POSTALCODE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "POSTALCODE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "COUNTRY",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "COUNTRY",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "TERRITORY",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "TERRITORY",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "CONTACTLASTNAME",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "CONTACTLASTNAME",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "CONTACTFIRSTNAME",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "CONTACTFIRSTNAME",
+										"type": "String",
+										"physicalType": "String"
+									}
+								},
+								{
+									"source": {
+										"name": "DEALSIZE",
+										"type": "String",
+										"physicalType": "String"
+									},
+									"sink": {
+										"name": "DEALSIZE",
+										"type": "String",
+										"physicalType": "String"
+									}
+								}
+							],
+							"typeConversion": true,
+							"typeConversionSettings": {
+								"allowDataTruncation": true,
+								"treatBooleanAsNumber": false
+							}
+						}
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-02-12T20:19:26Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SINK_SQLDBA_DF')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ONPREM_SQLDBA",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_onprem_ss')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_Source_onprem_Sqlserver",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "customer_id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "first_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "last_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "email",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_at",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "updated_at",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Customers"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Conditional_Split')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_ConditionalSplit",
+								"type": "DatasetReference"
+							},
+							"name": "sourceconditionalsplit"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_SINK_DF",
+								"type": "DatasetReference"
+							},
+							"name": "sinkUSAUK"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_SINK_DF",
+								"type": "DatasetReference"
+							},
+							"name": "sink2USAIND"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_SINK_DF",
+								"type": "DatasetReference"
+							},
+							"name": "sink3Default"
+						}
+					],
+					"transformations": [
+						{
+							"name": "split1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Row as short,",
+						"          Country as string,",
+						"          Year as integer,",
+						"          Product_Type as string,",
+						"          Sales as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> sourceconditionalsplit",
+						"sourceconditionalsplit split(Country == 'USA' || Country == 'UK',",
+						"     Country == 'USA' || Country == 'IND',",
+						"     disjoint: true) ~> split1@(USAUK, USAIND, Default)",
+						"split1@USAUK sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['USAUK.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkUSAUK",
+						"split1@USAIND sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['USAIND.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink2USAIND",
+						"split1@Default sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['ALL_Countries.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink3Default"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Data_Flow_Aggregation2002')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Sales_DF",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Sink_Database",
+								"type": "DatasetReference"
+							},
+							"name": "sink1aggregatedata"
+						}
+					],
+					"transformations": [
+						{
+							"name": "aggregate1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Country as string,",
+						"          Year as short,",
+						"          Product_Type as string,",
+						"          Sales as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 aggregate(groupBy(Country),",
+						"     MaxSales = max(Sales),",
+						"          MinSales = min(Sales),",
+						"          AvgSales = avg(Sales),",
+						"          CountSales = count(Sales)) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1aggregatedata"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Exists')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Exxists_1",
+								"type": "DatasetReference"
+							},
+							"name": "source1exist"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_UNION_2",
+								"type": "DatasetReference"
+							},
+							"name": "source2exists"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Sink_exists",
+								"type": "DatasetReference"
+							},
+							"name": "sink1exists"
+						}
+					],
+					"transformations": [
+						{
+							"name": "exists1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          EmployeeID as integer,",
+						"          EmployeeName as string,",
+						"          Address as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1exist",
+						"source(output(",
+						"          EmployeeID as integer,",
+						"          EmployeeName as string,",
+						"          Address as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source2exists",
+						"source1exist, source2exists exists(source1exist@EmployeeID == source2exists@EmployeeID,",
+						"     negate:false,",
+						"     broadcast: 'auto')~> exists1",
+						"exists1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SaleID as string,",
+						"          { CustomerID} as string,",
+						"          { SaleDate} as string,",
+						"          { ProductID} as string,",
+						"          { Quantity} as string,",
+						"          { UnitPrice} as string,",
+						"          { TotalAmount} as string,",
+						"          CustomerID as string,",
+						"          { CustomerName} as string,",
+						"          { Email} as string,",
+						"          { Phone} as string,",
+						"          { Address} as string",
+						"     ),",
+						"     partitionFileNames:['Sinkexists.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1exists"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_First')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Source_DF",
+								"type": "DatasetReference"
+							},
+							"name": "SalesData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_SINK_DF",
+								"type": "DatasetReference"
+							},
+							"name": "sinksales"
+						}
+					],
+					"transformations": [
+						{
+							"name": "filtertrasformation"
+						},
+						{
+							"name": "selecttrasforamtion"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Country as string,",
+						"          Year as integer,",
+						"          Product_Type as string,",
+						"          Sales as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> SalesData",
+						"SalesData filter(Country == 'USA' && Product_Type  == 'electronics') ~> filtertrasformation",
+						"filtertrasformation select(mapColumn(",
+						"          Country,",
+						"          Year,",
+						"          Sales",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selecttrasforamtion",
+						"selecttrasforamtion sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['Salesdata.csv'],",
+						"     truncate: true,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinksales"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DF_InnerJoin')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -277,6 +1718,107 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     partitionBy('hash', 1)) ~> sink1pivot"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_SQLDBA_JOIN')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_SQLDBA_DF",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_2nd_sqldb_DF",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_ONPREM_SINK_2102",
+								"type": "DatasetReference"
+							},
+							"name": "sink1",
+							"rejectedDataLinkedService": {
+								"referenceName": "LS_ADLS_metadata",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ProductID as integer,",
+						"          Name as string,",
+						"          ProductNumber as string,",
+						"          Color as string,",
+						"          StandardCost as decimal(19,4),",
+						"          ListPrice as decimal(19,4),",
+						"          Size as string,",
+						"          Weight as decimal(8,2),",
+						"          ProductCategoryID as integer,",
+						"          ProductModelID as integer,",
+						"          SellStartDate as timestamp,",
+						"          SellEndDate as timestamp,",
+						"          DiscontinuedDate as timestamp,",
+						"          ThumbNailPhoto as binary,",
+						"          ThumbnailPhotoFileName as string,",
+						"          rowguid as string,",
+						"          ModifiedDate as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source(output(",
+						"          ProductCategoryID as integer,",
+						"          ParentProductCategoryID as integer,",
+						"          Name as string,",
+						"          rowguid as string,",
+						"          ModifiedDate as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source2",
+						"source1, source2 join(source1@ProductCategoryID == source2@ProductCategoryID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'allErrors',",
+						"     transactionCommit: 'single',",
+						"     reportSuccessOnError: false,",
+						"     outputAssertFailedRows: true,",
+						"     assertFailure_fileSystem: 'raw',",
+						"     assertFailure_folderPath: 'reject') ~> sink1"
 					]
 				}
 			},
@@ -623,7 +2165,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Data_Flow_Aggregation2002')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_Copy_activity')]",
@@ -693,7 +2237,9 @@
 				"annotations": [],
 				"lastPublishTime": "2025-02-06T15:59:55Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_Copy_activity_WM_Parameter_using_File')]",
@@ -945,7 +2491,9 @@
 				"annotations": [],
 				"lastPublishTime": "2025-02-07T04:06:31Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_Copy_activity_using_watermark')]",
@@ -1123,7 +2671,9 @@
 				"annotations": [],
 				"lastPublishTime": "2025-02-13T08:03:01Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_Copy_activity_using_watermark_Parameter')]",
@@ -1357,379 +2907,8 @@
 				"annotations": [],
 				"lastPublishTime": "2025-02-06T18:26:10Z"
 			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_DF_Aggregate')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Second_1502",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Second_1502",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"Sales": {},
-									"sinkdata": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2025-02-15T03:11:36Z"
-			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Second_1502')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_DF_Conditional_Split')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Conditional_Split",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Conditional_Split",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"sourceconditionalsplit": {},
-									"sinkUSAUK": {},
-									"sink2USAIND": {},
-									"sink3Default": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2025-02-15T10:26:25Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_DF_Split_transformation')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Transformations_split",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Transformations_split",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"sourcesplit": {},
-									"sink1": {},
-									"sink2": {},
-									"sink3": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Transformations_split')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Data_Flow_1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Data flow1",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_First",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"SalesData": {},
-									"sinksales": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2025-02-14T10:43:57Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Derived_Column')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "df_derive_column",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_derive_column",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1derivecol": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_derive_column')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Exists')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Exists",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Exists",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1exist": {},
-									"source2exists": {},
-									"sink1exists": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2025-02-16T10:38:04Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Inner_Join')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_InnerJoin",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_InnerJoin",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"Salesjoin": {},
-									"customer": {},
-									"SinkInnerJoin": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 16,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2025-02-16T07:06:53Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_InnerJoin')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Movies')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Moviedata_Activity",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Moviedata_Activity",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"sourceofMoviedata": {},
-									"sink1stream": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Moviedata_Activity')]"
+				"[concat(variables('factoryId'), '/datasets/DS_onprem_ss')]"
 			]
 		}
 	]
