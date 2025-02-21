@@ -1,0 +1,16 @@
+{
+	"name": "DS_ONPREM_SINK_2102",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDBA_SINK",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": "PRODJOIN"
+		}
+	}
+}

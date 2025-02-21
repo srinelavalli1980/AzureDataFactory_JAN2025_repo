@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DS_SINK_SQLDBA_DF",
+						"referenceName": "DS_ONPREM_SINK_2102",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
