@@ -83,7 +83,7 @@
 				"join1 select(mapColumn(",
 				"          S1ProdID = ProductID,",
 				"          S1Name = source1@Name,",
-				"          ProductNumber,",
+				"          SProdNumber = ProductNumber,",
 				"          Shades = Color,",
 				"          StandardCost,",
 				"          S1Price = ListPrice,",
