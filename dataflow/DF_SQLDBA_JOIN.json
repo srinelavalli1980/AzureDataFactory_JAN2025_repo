@@ -84,7 +84,7 @@
 				"          ProductID,",
 				"          Name = source1@Name,",
 				"          ProductNumber,",
-				"          Colour = Color,",
+				"          Shades = Color,",
 				"          StandardCost,",
 				"          ListPrice,",
 				"          Size,",
