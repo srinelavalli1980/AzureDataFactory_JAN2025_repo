@@ -81,7 +81,7 @@
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
 				"join1 select(mapColumn(",
-				"          ProductID,",
+				"          S1ProdID = ProductID,",
 				"          S1Name = source1@Name,",
 				"          ProductNumber,",
 				"          Shades = Color,",
