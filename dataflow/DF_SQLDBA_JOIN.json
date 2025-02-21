@@ -98,7 +98,7 @@
 				"          S1rowguid = source1@rowguid,",
 				"          s1modidate = source1@ModifiedDate,",
 				"          S2ProduCategoryID = source2@ProductCategoryID,",
-				"          ProdCatID = ParentProductCategoryID,",
+				"          S2ProdCatID = ParentProductCategoryID,",
 				"          S2Name = source2@Name,",
 				"          S2rowguid = source2@rowguid,",
 				"          s2modidate = source2@ModifiedDate",
