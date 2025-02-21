@@ -93,7 +93,7 @@
 				"          ProductModelID,",
 				"          SellStartDate,",
 				"          SellEndDate,",
-				"          DiscontinuedDate,",
+				"          DiscDate = DiscontinuedDate,",
 				"          ThumbNailPhoto,",
 				"          ThumbnailPhotoFileName,",
 				"          rowguid = source1@rowguid,",
