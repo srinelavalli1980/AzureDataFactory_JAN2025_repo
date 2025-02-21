@@ -1,0 +1,21 @@
+{
+	"name": "DS_GetMetadata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_GetMetadata",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
