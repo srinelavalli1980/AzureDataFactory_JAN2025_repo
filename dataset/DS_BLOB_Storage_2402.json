@@ -5,6 +5,11 @@
 			"referenceName": "LS_BLOB_Storage2402",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"container": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

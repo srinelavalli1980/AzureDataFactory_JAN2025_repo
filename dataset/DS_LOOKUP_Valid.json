@@ -5,20 +5,12 @@
 			"referenceName": "LS_LOOKUP_Valid",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"container": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": {
-					"value": "@dataset().container",
-					"type": "Expression"
-				}
+				"container": "raw"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

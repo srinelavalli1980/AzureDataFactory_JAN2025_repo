@@ -1,5 +1,5 @@
 {
-	"name": "PL_Data_ingestion_from_Azure_BLOB",
+	"name": "PL_Data_ingestion_from_Azure_BLOB_lookup",
 	"properties": {
 		"activities": [
 			{
@@ -10,7 +10,10 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "DS_BLOB_Storage_2402",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "raw"
+						}
 					},
 					"timeout": "0.12:00:00",
 					"sleep": 10,
@@ -18,52 +21,11 @@
 				}
 			},
 			{
-				"name": "Get Metadata validation",
-				"type": "GetMetadata",
-				"dependsOn": [
-					{
-						"activity": "Validation of the container",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataset": {
-						"referenceName": "DS_getMetadata_2402",
-						"type": "DatasetReference"
-					},
-					"fieldList": [
-						"childItems",
-						"exists",
-						"itemName",
-						"itemType",
-						"lastModified"
-					],
-					"storeSettings": {
-						"type": "AzureBlobStorageReadSettings",
-						"recursive": true,
-						"enablePartitionDiscovery": false
-					},
-					"formatSettings": {
-						"type": "DelimitedTextReadSettings"
-					}
-				}
-			},
-			{
 				"name": "Lookup1",
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata validation",
+						"activity": "Validation of the container",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -198,14 +160,6 @@
 				}
 			}
 		],
-		"variables": {
-			"size": {
-				"type": "Integer"
-			},
-			"name": {
-				"type": "String"
-			}
-		},
 		"annotations": []
 	}
 }
