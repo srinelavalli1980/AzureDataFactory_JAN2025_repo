@@ -13,6 +13,346 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/DF_Exists')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Exxists_1",
+								"type": "DatasetReference"
+							},
+							"name": "source1exist"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_UNION_2",
+								"type": "DatasetReference"
+							},
+							"name": "source2exists"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Sink_exists",
+								"type": "DatasetReference"
+							},
+							"name": "sink1exists"
+						}
+					],
+					"transformations": [
+						{
+							"name": "exists1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          EmployeeID as integer,",
+						"          EmployeeName as string,",
+						"          Address as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1exist",
+						"source(output(",
+						"          EmployeeID as integer,",
+						"          EmployeeName as string,",
+						"          Address as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source2exists",
+						"source1exist, source2exists exists(source1exist@EmployeeID == source2exists@EmployeeID,",
+						"     negate:false,",
+						"     broadcast: 'auto')~> exists1",
+						"exists1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SaleID as string,",
+						"          { CustomerID} as string,",
+						"          { SaleDate} as string,",
+						"          { ProductID} as string,",
+						"          { Quantity} as string,",
+						"          { UnitPrice} as string,",
+						"          { TotalAmount} as string,",
+						"          CustomerID as string,",
+						"          { CustomerName} as string,",
+						"          { Email} as string,",
+						"          { Phone} as string,",
+						"          { Address} as string",
+						"     ),",
+						"     partitionFileNames:['Sinkexists.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1exists"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_First')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Source_DF",
+								"type": "DatasetReference"
+							},
+							"name": "SalesData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_SINK_DF",
+								"type": "DatasetReference"
+							},
+							"name": "sinksales"
+						}
+					],
+					"transformations": [
+						{
+							"name": "filtertrasformation"
+						},
+						{
+							"name": "selecttrasforamtion"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Country as string,",
+						"          Year as integer,",
+						"          Product_Type as string,",
+						"          Sales as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> SalesData",
+						"SalesData filter(Country == 'USA' && Product_Type  == 'electronics') ~> filtertrasformation",
+						"filtertrasformation select(mapColumn(",
+						"          Country,",
+						"          Year,",
+						"          Sales",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selecttrasforamtion",
+						"selecttrasforamtion sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['Salesdata.csv'],",
+						"     truncate: true,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinksales"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_InnerJoin')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Sales_Join",
+								"type": "DatasetReference"
+							},
+							"name": "Salesjoin"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_customer_join",
+								"type": "DatasetReference"
+							},
+							"name": "customer"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Sink_InnerJoin",
+								"type": "DatasetReference"
+							},
+							"name": "SinkInnerJoin"
+						}
+					],
+					"transformations": [
+						{
+							"name": "innerjoin"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          SaleID as short,",
+						"          { CustomerID} as integer,",
+						"          { SaleDate} as string,",
+						"          { ProductID} as short,",
+						"          { Quantity} as short,",
+						"          { UnitPrice} as double,",
+						"          { TotalAmount} as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Salesjoin",
+						"source(output(",
+						"          CustomerID as integer,",
+						"          { CustomerName} as string,",
+						"          { Email} as string,",
+						"          { Phone} as string,",
+						"          { Address} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> customer",
+						"Salesjoin, customer join({ CustomerID} == CustomerID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> innerjoin",
+						"innerjoin sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['Salesjoincustomer.csv'],",
+						"     truncate: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> SinkInnerJoin"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Moviedata_Activity')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Moviedata",
+								"type": "DatasetReference"
+							},
+							"name": "sourceofMoviedata"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_cloudDBA",
+								"type": "DatasetReference"
+							},
+							"name": "sink1stream",
+							"rejectedDataLinkedService": {
+								"referenceName": "LS_attach_file",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "selectMovie"
+						},
+						{
+							"name": "filter1movie"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "rankstream"
+						},
+						{
+							"name": "aggregatestreem"
+						},
+						{
+							"name": "assertstream"
+						},
+						{
+							"name": "alterRow1stream"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          movie as string,",
+						"          title as string,",
+						"          genres as string,",
+						"          year as integer,",
+						"          Rating as short,",
+						"          {Rotton Tomato} as short",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     moveFiles: ['moviefile','archive']) ~> sourceofMoviedata",
+						"sourceofMoviedata select(mapColumn(",
+						"          movie,",
+						"          title,",
+						"          genres,",
+						"          year,",
+						"          {Rotten Tomato} = {Rotton Tomato}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectMovie",
+						"selectMovie filter(year>1910 && year<2000) ~> filter1movie",
+						"filter1movie derive(Primery_genres = iif(instr(genres,'|') > 0, substring(genres,1,instr(genres,'|')-1), genres)) ~> derivedColumn1",
+						"derivedColumn1 window(over(year,",
+						"          Primery_genres),",
+						"     desc({Rotten Tomato}, true),",
+						"     rank = rank()) ~> rankstream",
+						"rankstream aggregate(groupBy(year,",
+						"          Primery_genres),",
+						"     avg = avg({Rotten Tomato}),",
+						"          max = max({Rotten Tomato}),",
+						"          min = min({Rotten Tomato}),",
+						"          count = count({Rotten Tomato})) ~> aggregatestreem",
+						"aggregatestreem assert(expectTrue(year>1920, false, 'assert1', null, 'Validate year greater than 1950')) ~> assertstream",
+						"assertstream alterRow(insertIf(true())) ~> alterRow1stream",
+						"alterRow1stream sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     outputAssertFailedRows: true,",
+						"     assertFailure_container: 'error-log',",
+						"     ignoreAssertFailedRows: true,",
+						"     mapColumn(",
+						"          year,",
+						"          Primery_genres,",
+						"          avg,",
+						"          max,",
+						"          min,",
+						"          count",
+						"     )) ~> sink1stream"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DF_Pivot')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1530,189 +1870,9 @@
 				"annotations": [],
 				"lastPublishTime": "2025-02-14T10:43:57Z"
 			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Derived_Column')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "df_derive_column",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_derive_column",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1derivecol": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_derive_column')]"
+				"[concat(variables('factoryId'), '/dataflows/DF_First')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Exists')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Exists",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Exists",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1exist": {},
-									"source2exists": {},
-									"sink1exists": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2025-02-16T10:38:04Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Inner_Join')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_InnerJoin",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_InnerJoin",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"Salesjoin": {},
-									"customer": {},
-									"SinkInnerJoin": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 16,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2025-02-16T07:06:53Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Movies')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "DF_Moviedata_Activity",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Moviedata_Activity",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"sourceofMoviedata": {},
-									"sink1stream": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": []
 		}
 	]
 }
