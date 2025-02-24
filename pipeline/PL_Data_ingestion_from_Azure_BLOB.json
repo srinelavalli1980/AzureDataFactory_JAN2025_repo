@@ -133,7 +133,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"method": "POST",
+								"method": "GET",
 								"url": "https://www.eenadu.net"
 							}
 						}
