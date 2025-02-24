@@ -1,8 +1,8 @@
 {
-	"name": "DS_LOOKUP_Valid",
+	"name": "DS_Source_Validate_2402",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_LOOKUP_Valid",
+			"referenceName": "LS_Source_Validate_2402",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
