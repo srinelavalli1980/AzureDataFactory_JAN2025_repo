@@ -1,0 +1,39 @@
+{
+	"name": "DS_Health_JSON_Http",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Health_json_http",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"Baseurl": {
+					"value": "@dataset().SourceBaseUrl",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"SourceBaseUrl": {
+				"type": "string"
+			},
+			"SourceRelativeUrl": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().SourceRelativeUrl",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

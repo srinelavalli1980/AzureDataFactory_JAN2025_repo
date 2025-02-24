@@ -33,6 +33,102 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "ForEach1 JSON",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup hospital data json",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup hospital data json').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data of the files",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings",
+										"copyBehavior": "FlattenHierarchy"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Health_JSON_Http",
+									"type": "DatasetReference",
+									"parameters": {
+										"SourceBaseUrl": {
+											"value": "@item().SourceBaseUrl",
+											"type": "Expression"
+										},
+										"SourceRelativeUrl": {
+											"value": "@item().SourceRelativeUrl",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_OUTPUT_Health_Json",
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "output-sink",
+										"file_name": {
+											"value": "@item().SinkFile",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"annotations": []
