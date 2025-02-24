@@ -30,7 +30,8 @@
 					"dataset": {
 						"referenceName": "DS_Hospital_Metadata",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
