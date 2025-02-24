@@ -1,0 +1,22 @@
+{
+	"name": "DS_BLOB_Storage_2402",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_Storage2402",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
