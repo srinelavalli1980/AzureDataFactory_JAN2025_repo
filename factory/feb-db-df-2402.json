@@ -1,0 +1,9 @@
+{
+	"name": "feb-db-df-2402",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "48dc22f1-180c-444b-b572-411612bcb5d5",
+		"tenantId": "2d3c6c2d-1a42-4c98-abe5-56846d4e28cd"
+	}
+}
