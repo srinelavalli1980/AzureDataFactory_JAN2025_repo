@@ -86,14 +86,14 @@
 								"type": "Expression"
 							},
 							"filename": {
-								"value": "@{activity('Get Metadata validation').output.childItems.name}",
+								"value": "@{activity('Get Metadata validation').output.childItems}",
 								"type": "Expression"
 							}
 						}
 					},
 					"fieldList": [
-						"columnCount",
-						"size"
+						"size",
+						"childItems"
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
