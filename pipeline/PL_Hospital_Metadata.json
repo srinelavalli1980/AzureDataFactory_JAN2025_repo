@@ -1,9 +1,10 @@
 {
-	"name": "pipeline1",
+	"name": "PL_Hospital_Metadata",
 	"properties": {
 		"activities": [
 			{
 				"name": "Lookup hospital data json",
+				"description": "24th Feb Metadata",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -13,7 +14,24 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_Hospital_Metadata",
+						"type": "DatasetReference"
+					}
+				}
 			}
 		],
 		"annotations": []
