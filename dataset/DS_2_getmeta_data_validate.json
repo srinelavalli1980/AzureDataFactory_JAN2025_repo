@@ -1,16 +1,24 @@
 {
-	"name": "DS_getMetadata_2402",
+	"name": "DS_2_getmeta_data_validate",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_Getmetadata_2402",
+			"referenceName": "LS_2_getmeta_data_validate",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"container": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "raw"
+				"container": {
+					"value": "@dataset().container",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

@@ -58,8 +58,8 @@
 				}
 			},
 			{
-				"name": "Lookup1",
-				"type": "Lookup",
+				"name": "Get Metadata1",
+				"type": "GetMetadata",
 				"dependsOn": [
 					{
 						"activity": "Get Metadata validation",
@@ -77,32 +77,26 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
 					"dataset": {
-						"referenceName": "DS_LOOKUP_Valid",
+						"referenceName": "DS_2_getmeta_data_validate",
 						"type": "DatasetReference",
 						"parameters": {
 							"container": {
 								"value": "@activity('Get Metadata validation').output.itemName",
 								"type": "Expression"
-							},
-							"filename": {
-								"value": "@{activity('Get Metadata validation').output.childItems().name}",
-								"type": "Expression"
 							}
 						}
 					},
-					"firstRowOnly": false
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
 				}
 			}
 		],
@@ -112,9 +106,6 @@
 			},
 			"name": {
 				"type": "String"
-			},
-			"child": {
-				"type": "Array"
 			}
 		},
 		"annotations": []
