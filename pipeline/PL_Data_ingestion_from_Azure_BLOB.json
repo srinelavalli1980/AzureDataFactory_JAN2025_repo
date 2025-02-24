@@ -86,13 +86,12 @@
 								"type": "Expression"
 							},
 							"filename": {
-								"value": "@{activity('Get Metadata validation').output.childItems}",
+								"value": "@{activity('Get Metadata validation').output.childItems.name}",
 								"type": "Expression"
 							}
 						}
 					},
 					"fieldList": [
-						"size",
 						"childItems"
 					],
 					"storeSettings": {
