@@ -56,6 +56,53 @@
 						"type": "DelimitedTextReadSettings"
 					}
 				}
+			},
+			{
+				"name": "Get Metadata size and count",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata validation",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_Size_cnt_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": {
+								"value": "@activity('Get Metadata validation').output.itemName",
+								"type": "Expression"
+							},
+							"filename": {
+								"value": "@activity('Get Metadata validation').output.childItems.name",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"columnCount",
+						"size"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
 			}
 		],
 		"annotations": []
