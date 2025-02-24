@@ -86,7 +86,7 @@
 								"type": "Expression"
 							},
 							"filename": {
-								"value": "@activity('Get Metadata validation').output.childItems.name",
+								"value": "@{activity('Get Metadata validation').output.childItems.name}",
 								"type": "Expression"
 							}
 						}
