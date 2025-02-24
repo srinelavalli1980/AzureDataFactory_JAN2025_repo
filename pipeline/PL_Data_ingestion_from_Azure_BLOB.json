@@ -58,8 +58,8 @@
 				}
 			},
 			{
-				"name": "Get Metadata size and count",
-				"type": "GetMetadata",
+				"name": "Lookup1",
+				"type": "Lookup",
 				"dependsOn": [
 					{
 						"activity": "Get Metadata validation",
@@ -77,8 +77,19 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
 					"dataset": {
-						"referenceName": "DS_Size_cnt_dataset",
+						"referenceName": "DS_LOOKUP_Valid",
 						"type": "DatasetReference",
 						"parameters": {
 							"container": {
@@ -86,24 +97,26 @@
 								"type": "Expression"
 							},
 							"filename": {
-								"value": "@{activity('Get Metadata validation').output.childItems.name}",
+								"value": "@{activity('Get Metadata validation').output.childItems().name}",
 								"type": "Expression"
 							}
 						}
 					},
-					"fieldList": [
-						"childItems"
-					],
-					"storeSettings": {
-						"type": "AzureBlobStorageReadSettings",
-						"enablePartitionDiscovery": false
-					},
-					"formatSettings": {
-						"type": "DelimitedTextReadSettings"
-					}
+					"firstRowOnly": false
 				}
 			}
 		],
+		"variables": {
+			"size": {
+				"type": "Integer"
+			},
+			"name": {
+				"type": "String"
+			},
+			"child": {
+				"type": "Array"
+			}
+		},
 		"annotations": []
 	}
 }
