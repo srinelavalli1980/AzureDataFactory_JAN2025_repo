@@ -1,0 +1,19 @@
+{
+	"name": "DS_Hospital_Metadata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Hospital_metadata",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Hospital_data.json",
+				"container": "hospital"
+			}
+		},
+		"schema": {}
+	}
+}
