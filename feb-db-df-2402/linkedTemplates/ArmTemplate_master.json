@@ -1,0 +1,498 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "feb-db-df-2402"
+		},
+		"LS_ADLS_metadata_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_metadata'"
+		},
+		"LS_BLOB_Validate_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_BLOB_Validate'"
+		},
+		"LS_Config_Health_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Config_Health'"
+		},
+		"LS_GetMetadata_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_GetMetadata'"
+		},
+		"LS_Hospital_metadata_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Hospital_metadata'"
+		},
+		"LS_INPUT_DF_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_INPUT_DF'"
+		},
+		"LS_Multi_file_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_Multi_file'"
+		},
+		"LS_ONPREM_SQLDBA_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_ONPREM_SQLDBA'"
+		},
+		"LS_Out_health_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_Out_health'"
+		},
+		"LS_SINK_DATA_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SINK_DATA'"
+		},
+		"LS_SQLDBA_Dev_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLDBA_Dev'"
+		},
+		"LS_SQLDBA_SINK_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLDBA_SINK'"
+		},
+		"LS_SQLDBA_mini_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLDBA_mini'"
+		},
+		"LS_Source_onprem_Sqlserver_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Source_onprem_Sqlserver'",
+			"defaultValue": "integrated security=True;Data Source=DESKTOP-NUVB7F9\\SQLEXPRESS;Initial Catalog=devjan"
+		},
+		"LS_Source_onprem_Sqlserver_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_Source_onprem_Sqlserver'"
+		},
+		"LS_TGT_Cloud_Sqlserver_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_TGT_Cloud_Sqlserver'"
+		},
+		"LS_attach_file_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_attach_file'"
+		},
+		"LS_health_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_health'"
+		},
+		"LS_log_json_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_log_json'"
+		},
+		"LS_ADLS_metadata_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_HttpServer1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/"
+		},
+		"LS_Http_Movie_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseUrl}"
+		},
+		"LS_Http_Parameter_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseUrl}"
+		},
+		"LS_Http_Source_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().SourceBaseUrl}"
+		},
+		"LS_Http_Source_parameter_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseUrl}"
+		},
+		"LS_Multi_file_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_Out_health_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_PAramaeter_set_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().BaseURL}"
+		},
+		"LS_SINK_DATA_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SINK_DATA_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "dev-ss-test"
+		},
+		"LS_SINK_DATA_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "dev-ss-test"
+		},
+		"LS_SQLDBA_Dev_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "jan-azure-db"
+		},
+		"LS_SQLDBA_SINK_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
+		"LS_SQLDBA_mini_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "jan-batch-sql-server.database.windows.net"
+		},
+		"LS_SQLDBA_mini_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "jan-azure-db"
+		},
+		"LS_SQLDBA_mini_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adminuser"
+		},
+		"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "DESKTOP-NUVB7F9\\SRINIVASARAO"
+		},
+		"LS_log_json_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"tr_storage_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/dab63fa7-b658-4f30-9c43-166248715acc/resourceGroups/Dattha/providers/Microsoft.Storage/storageAccounts/devjanbatchadlsgen2"
+		},
+		"triggertumbling_properties_pipeline_parameters_Windowsstarttime": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "feb-db-df-2402_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_ADLS_metadata_accountKey": {
+						"value": "[parameters('LS_ADLS_metadata_accountKey')]"
+					},
+					"LS_BLOB_Validate_connectionString": {
+						"value": "[parameters('LS_BLOB_Validate_connectionString')]"
+					},
+					"LS_Config_Health_connectionString": {
+						"value": "[parameters('LS_Config_Health_connectionString')]"
+					},
+					"LS_GetMetadata_connectionString": {
+						"value": "[parameters('LS_GetMetadata_connectionString')]"
+					},
+					"LS_Hospital_metadata_connectionString": {
+						"value": "[parameters('LS_Hospital_metadata_connectionString')]"
+					},
+					"LS_INPUT_DF_connectionString": {
+						"value": "[parameters('LS_INPUT_DF_connectionString')]"
+					},
+					"LS_Multi_file_accountKey": {
+						"value": "[parameters('LS_Multi_file_accountKey')]"
+					},
+					"LS_Out_health_accountKey": {
+						"value": "[parameters('LS_Out_health_accountKey')]"
+					},
+					"LS_SINK_DATA_password": {
+						"value": "[parameters('LS_SINK_DATA_password')]"
+					},
+					"LS_SQLDBA_Dev_password": {
+						"value": "[parameters('LS_SQLDBA_Dev_password')]"
+					},
+					"LS_SQLDBA_SINK_password": {
+						"value": "[parameters('LS_SQLDBA_SINK_password')]"
+					},
+					"LS_SQLDBA_mini_password": {
+						"value": "[parameters('LS_SQLDBA_mini_password')]"
+					},
+					"LS_ADLS_metadata_properties_typeProperties_url": {
+						"value": "[parameters('LS_ADLS_metadata_properties_typeProperties_url')]"
+					},
+					"LS_HttpServer1_properties_typeProperties_url": {
+						"value": "[parameters('LS_HttpServer1_properties_typeProperties_url')]"
+					},
+					"LS_Http_Movie_properties_typeProperties_url": {
+						"value": "[parameters('LS_Http_Movie_properties_typeProperties_url')]"
+					},
+					"LS_Http_Parameter_properties_typeProperties_url": {
+						"value": "[parameters('LS_Http_Parameter_properties_typeProperties_url')]"
+					},
+					"LS_Http_Source_properties_typeProperties_url": {
+						"value": "[parameters('LS_Http_Source_properties_typeProperties_url')]"
+					},
+					"LS_Http_Source_parameter_properties_typeProperties_url": {
+						"value": "[parameters('LS_Http_Source_parameter_properties_typeProperties_url')]"
+					},
+					"LS_Multi_file_properties_typeProperties_url": {
+						"value": "[parameters('LS_Multi_file_properties_typeProperties_url')]"
+					},
+					"LS_Out_health_properties_typeProperties_url": {
+						"value": "[parameters('LS_Out_health_properties_typeProperties_url')]"
+					},
+					"LS_PAramaeter_set_properties_typeProperties_url": {
+						"value": "[parameters('LS_PAramaeter_set_properties_typeProperties_url')]"
+					},
+					"LS_SINK_DATA_properties_typeProperties_server": {
+						"value": "[parameters('LS_SINK_DATA_properties_typeProperties_server')]"
+					},
+					"LS_SINK_DATA_properties_typeProperties_database": {
+						"value": "[parameters('LS_SINK_DATA_properties_typeProperties_database')]"
+					},
+					"LS_SINK_DATA_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SINK_DATA_properties_typeProperties_userName')]"
+					},
+					"LS_SQLDBA_Dev_properties_typeProperties_server": {
+						"value": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_server')]"
+					},
+					"LS_SQLDBA_Dev_properties_typeProperties_database": {
+						"value": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_database')]"
+					},
+					"LS_SQLDBA_Dev_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_userName')]"
+					},
+					"LS_SQLDBA_SINK_properties_typeProperties_server": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_server')]"
+					},
+					"LS_SQLDBA_SINK_properties_typeProperties_database": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_database')]"
+					},
+					"LS_SQLDBA_SINK_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_userName')]"
+					},
+					"LS_SQLDBA_mini_properties_typeProperties_server": {
+						"value": "[parameters('LS_SQLDBA_mini_properties_typeProperties_server')]"
+					},
+					"LS_SQLDBA_mini_properties_typeProperties_database": {
+						"value": "[parameters('LS_SQLDBA_mini_properties_typeProperties_database')]"
+					},
+					"LS_SQLDBA_mini_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SQLDBA_mini_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_TGT_Cloud_Sqlserver_connectionString": {
+						"value": "[parameters('LS_TGT_Cloud_Sqlserver_connectionString')]"
+					},
+					"LS_attach_file_connectionString": {
+						"value": "[parameters('LS_attach_file_connectionString')]"
+					},
+					"LS_health_connectionString": {
+						"value": "[parameters('LS_health_connectionString')]"
+					},
+					"LS_log_json_accountKey": {
+						"value": "[parameters('LS_log_json_accountKey')]"
+					},
+					"LS_log_json_properties_typeProperties_url": {
+						"value": "[parameters('LS_log_json_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_ONPREM_SQLDBA_connectionString": {
+						"value": "[parameters('LS_ONPREM_SQLDBA_connectionString')]"
+					},
+					"LS_Source_onprem_Sqlserver_connectionString": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_connectionString')]"
+					},
+					"LS_Source_onprem_Sqlserver_password": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_password')]"
+					},
+					"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_3')]"
+			]
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_5",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_4')]"
+			]
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_6",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_6.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_5')]"
+			]
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_7",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_7.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"tr_storage_properties_typeProperties_scope": {
+						"value": "[parameters('tr_storage_properties_typeProperties_scope')]"
+					},
+					"triggertumbling_properties_pipeline_parameters_Windowsstarttime": {
+						"value": "[parameters('triggertumbling_properties_pipeline_parameters_Windowsstarttime')]"
+					},
+					"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
+						"value": "[parameters('triggertumbling_properties_pipeline_parameters_Windowsendtime')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_6')]"
+			]
+		}
+	]
+}
