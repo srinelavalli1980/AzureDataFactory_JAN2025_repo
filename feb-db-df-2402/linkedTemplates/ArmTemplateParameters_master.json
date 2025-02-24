@@ -65,6 +65,15 @@
 		"LS_Output_Health_json_accountKey": {
 			"value": ""
 		},
+		"LS_BLOB_Storage2402_connectionString": {
+			"value": ""
+		},
+		"LS_Getmetadata_2402_connectionString": {
+			"value": ""
+		},
+		"LS_size_cnt_dataset_connectionString": {
+			"value": ""
+		},
 		"LS_ADLS_metadata_properties_typeProperties_url": {
 			"value": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
 		},

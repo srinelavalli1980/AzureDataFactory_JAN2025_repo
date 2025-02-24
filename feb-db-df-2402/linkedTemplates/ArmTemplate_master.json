@@ -88,6 +88,18 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_Output_Health_json'"
 		},
+		"LS_BLOB_Storage2402_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_BLOB_Storage2402'"
+		},
+		"LS_Getmetadata_2402_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Getmetadata_2402'"
+		},
+		"LS_size_cnt_dataset_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_size_cnt_dataset'"
+		},
 		"LS_ADLS_metadata_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
@@ -358,6 +370,15 @@
 					},
 					"LS_Output_Health_json_accountKey": {
 						"value": "[parameters('LS_Output_Health_json_accountKey')]"
+					},
+					"LS_BLOB_Storage2402_connectionString": {
+						"value": "[parameters('LS_BLOB_Storage2402_connectionString')]"
+					},
+					"LS_Getmetadata_2402_connectionString": {
+						"value": "[parameters('LS_Getmetadata_2402_connectionString')]"
+					},
+					"LS_size_cnt_dataset_connectionString": {
+						"value": "[parameters('LS_size_cnt_dataset_connectionString')]"
 					},
 					"LS_log_json_properties_typeProperties_url": {
 						"value": "[parameters('LS_log_json_properties_typeProperties_url')]"
