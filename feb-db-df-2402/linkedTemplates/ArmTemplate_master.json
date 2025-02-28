@@ -7,9 +7,21 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "feb-db-df-2402"
 		},
+		"DS_SINK_Validate_2402_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'DS_SINK_Validate_2402'"
+		},
+		"LS_2_getmeta_data_validate_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_2_getmeta_data_validate'"
+		},
 		"LS_ADLS_metadata_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_metadata'"
+		},
+		"LS_BLOB_Storage2402_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_BLOB_Storage2402'"
 		},
 		"LS_BLOB_Validate_connectionString": {
 			"type": "secureString",
@@ -23,6 +35,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_GetMetadata'"
 		},
+		"LS_Getmetadata_2402_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Getmetadata_2402'"
+		},
 		"LS_Hospital_metadata_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_Hospital_metadata'"
@@ -30,6 +46,10 @@
 		"LS_INPUT_DF_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_INPUT_DF'"
+		},
+		"LS_LOOKUP_Valid_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_LOOKUP_Valid'"
 		},
 		"LS_Multi_file_accountKey": {
 			"type": "secureString",
@@ -42,6 +62,10 @@
 		"LS_Out_health_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_Out_health'"
+		},
+		"LS_Output_Health_json_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_Output_Health_json'"
 		},
 		"LS_SINK_DATA_password": {
 			"type": "secureString",
@@ -58,6 +82,10 @@
 		"LS_SQLDBA_mini_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_SQLDBA_mini'"
+		},
+		"LS_Source_Validate_2402_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Source_Validate_2402'"
 		},
 		"LS_Source_onprem_Sqlserver_connectionString": {
 			"type": "secureString",
@@ -84,25 +112,21 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_log_json'"
 		},
-		"LS_Output_Health_json_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_Output_Health_json'"
-		},
-		"LS_BLOB_Storage2402_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_BLOB_Storage2402'"
-		},
-		"LS_Getmetadata_2402_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_Getmetadata_2402'"
-		},
 		"LS_size_cnt_dataset_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_size_cnt_dataset'"
 		},
+		"DS_SINK_Validate_2402_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://febstorageaccount2402.dfs.core.windows.net/"
+		},
 		"LS_ADLS_metadata_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_Health_json_http_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().Baseurl}"
 		},
 		"LS_HttpServer1_properties_typeProperties_url": {
 			"type": "string",
@@ -131,6 +155,10 @@
 		"LS_Out_health_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_Output_Health_json_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://febstorageaccount2402.dfs.core.windows.net/"
 		},
 		"LS_PAramaeter_set_properties_typeProperties_url": {
 			"type": "string",
@@ -204,14 +232,6 @@
 			"type": "string",
 			"defaultValue": "@trigger().outputs.windowEndTime"
 		},
-		"LS_Health_json_http_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "@{linkedService().Baseurl}"
-		},
-		"LS_Output_Health_json_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://febstorageaccount2402.dfs.core.windows.net/"
-		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -239,8 +259,17 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"DS_SINK_Validate_2402_accountKey": {
+						"value": "[parameters('DS_SINK_Validate_2402_accountKey')]"
+					},
+					"LS_2_getmeta_data_validate_connectionString": {
+						"value": "[parameters('LS_2_getmeta_data_validate_connectionString')]"
+					},
 					"LS_ADLS_metadata_accountKey": {
 						"value": "[parameters('LS_ADLS_metadata_accountKey')]"
+					},
+					"LS_BLOB_Storage2402_connectionString": {
+						"value": "[parameters('LS_BLOB_Storage2402_connectionString')]"
 					},
 					"LS_BLOB_Validate_connectionString": {
 						"value": "[parameters('LS_BLOB_Validate_connectionString')]"
@@ -251,32 +280,29 @@
 					"LS_GetMetadata_connectionString": {
 						"value": "[parameters('LS_GetMetadata_connectionString')]"
 					},
+					"LS_Getmetadata_2402_connectionString": {
+						"value": "[parameters('LS_Getmetadata_2402_connectionString')]"
+					},
 					"LS_Hospital_metadata_connectionString": {
 						"value": "[parameters('LS_Hospital_metadata_connectionString')]"
 					},
 					"LS_INPUT_DF_connectionString": {
 						"value": "[parameters('LS_INPUT_DF_connectionString')]"
 					},
+					"LS_LOOKUP_Valid_connectionString": {
+						"value": "[parameters('LS_LOOKUP_Valid_connectionString')]"
+					},
 					"LS_Multi_file_accountKey": {
 						"value": "[parameters('LS_Multi_file_accountKey')]"
 					},
-					"LS_Out_health_accountKey": {
-						"value": "[parameters('LS_Out_health_accountKey')]"
-					},
-					"LS_SINK_DATA_password": {
-						"value": "[parameters('LS_SINK_DATA_password')]"
-					},
-					"LS_SQLDBA_Dev_password": {
-						"value": "[parameters('LS_SQLDBA_Dev_password')]"
-					},
-					"LS_SQLDBA_SINK_password": {
-						"value": "[parameters('LS_SQLDBA_SINK_password')]"
-					},
-					"LS_SQLDBA_mini_password": {
-						"value": "[parameters('LS_SQLDBA_mini_password')]"
+					"DS_SINK_Validate_2402_properties_typeProperties_url": {
+						"value": "[parameters('DS_SINK_Validate_2402_properties_typeProperties_url')]"
 					},
 					"LS_ADLS_metadata_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADLS_metadata_properties_typeProperties_url')]"
+					},
+					"LS_Health_json_http_properties_typeProperties_url": {
+						"value": "[parameters('LS_Health_json_http_properties_typeProperties_url')]"
 					},
 					"LS_HttpServer1_properties_typeProperties_url": {
 						"value": "[parameters('LS_HttpServer1_properties_typeProperties_url')]"
@@ -295,9 +321,66 @@
 					},
 					"LS_Multi_file_properties_typeProperties_url": {
 						"value": "[parameters('LS_Multi_file_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_Out_health_accountKey": {
+						"value": "[parameters('LS_Out_health_accountKey')]"
+					},
+					"LS_Output_Health_json_accountKey": {
+						"value": "[parameters('LS_Output_Health_json_accountKey')]"
+					},
+					"LS_SINK_DATA_password": {
+						"value": "[parameters('LS_SINK_DATA_password')]"
+					},
+					"LS_SQLDBA_Dev_password": {
+						"value": "[parameters('LS_SQLDBA_Dev_password')]"
+					},
+					"LS_SQLDBA_SINK_password": {
+						"value": "[parameters('LS_SQLDBA_SINK_password')]"
+					},
+					"LS_SQLDBA_mini_password": {
+						"value": "[parameters('LS_SQLDBA_mini_password')]"
+					},
+					"LS_Source_Validate_2402_connectionString": {
+						"value": "[parameters('LS_Source_Validate_2402_connectionString')]"
+					},
+					"LS_TGT_Cloud_Sqlserver_connectionString": {
+						"value": "[parameters('LS_TGT_Cloud_Sqlserver_connectionString')]"
+					},
+					"LS_attach_file_connectionString": {
+						"value": "[parameters('LS_attach_file_connectionString')]"
+					},
+					"LS_health_connectionString": {
+						"value": "[parameters('LS_health_connectionString')]"
+					},
+					"LS_log_json_accountKey": {
+						"value": "[parameters('LS_log_json_accountKey')]"
+					},
+					"LS_size_cnt_dataset_connectionString": {
+						"value": "[parameters('LS_size_cnt_dataset_connectionString')]"
 					},
 					"LS_Out_health_properties_typeProperties_url": {
 						"value": "[parameters('LS_Out_health_properties_typeProperties_url')]"
+					},
+					"LS_Output_Health_json_properties_typeProperties_url": {
+						"value": "[parameters('LS_Output_Health_json_properties_typeProperties_url')]"
 					},
 					"LS_PAramaeter_set_properties_typeProperties_url": {
 						"value": "[parameters('LS_PAramaeter_set_properties_typeProperties_url')]"
@@ -337,57 +420,9 @@
 					},
 					"LS_SQLDBA_mini_properties_typeProperties_userName": {
 						"value": "[parameters('LS_SQLDBA_mini_properties_typeProperties_userName')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "feb-db-df-2402_ArmTemplate_1",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2024-03-01",
-			"properties": {
-				"mode": "incremental",
-				"templateLink": {
-					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"factoryName": {
-						"value": "[parameters('factoryName')]"
-					},
-					"LS_TGT_Cloud_Sqlserver_connectionString": {
-						"value": "[parameters('LS_TGT_Cloud_Sqlserver_connectionString')]"
-					},
-					"LS_attach_file_connectionString": {
-						"value": "[parameters('LS_attach_file_connectionString')]"
-					},
-					"LS_health_connectionString": {
-						"value": "[parameters('LS_health_connectionString')]"
-					},
-					"LS_log_json_accountKey": {
-						"value": "[parameters('LS_log_json_accountKey')]"
-					},
-					"LS_Output_Health_json_accountKey": {
-						"value": "[parameters('LS_Output_Health_json_accountKey')]"
-					},
-					"LS_BLOB_Storage2402_connectionString": {
-						"value": "[parameters('LS_BLOB_Storage2402_connectionString')]"
-					},
-					"LS_Getmetadata_2402_connectionString": {
-						"value": "[parameters('LS_Getmetadata_2402_connectionString')]"
-					},
-					"LS_size_cnt_dataset_connectionString": {
-						"value": "[parameters('LS_size_cnt_dataset_connectionString')]"
 					},
 					"LS_log_json_properties_typeProperties_url": {
 						"value": "[parameters('LS_log_json_properties_typeProperties_url')]"
-					},
-					"LS_Health_json_http_properties_typeProperties_url": {
-						"value": "[parameters('LS_Health_json_http_properties_typeProperties_url')]"
-					},
-					"LS_Output_Health_json_properties_typeProperties_url": {
-						"value": "[parameters('LS_Output_Health_json_properties_typeProperties_url')]"
 					}
 				}
 			},
@@ -448,18 +483,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"LS_ONPREM_SQLDBA_connectionString": {
-						"value": "[parameters('LS_ONPREM_SQLDBA_connectionString')]"
-					},
-					"LS_Source_onprem_Sqlserver_connectionString": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_connectionString')]"
-					},
-					"LS_Source_onprem_Sqlserver_password": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_password')]"
-					},
-					"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
-						"value": "[parameters('LS_Source_onprem_Sqlserver_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -480,6 +503,18 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"LS_ONPREM_SQLDBA_connectionString": {
+						"value": "[parameters('LS_ONPREM_SQLDBA_connectionString')]"
+					},
+					"LS_Source_onprem_Sqlserver_connectionString": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_connectionString')]"
+					},
+					"LS_Source_onprem_Sqlserver_password": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_password')]"
+					},
+					"LS_Source_onprem_Sqlserver_properties_typeProperties_userName": {
+						"value": "[parameters('LS_Source_onprem_Sqlserver_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -520,6 +555,26 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_6')]"
+			]
+		},
+		{
+			"name": "feb-db-df-2402_ArmTemplate_8",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_8.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"tr_storage_properties_typeProperties_scope": {
 						"value": "[parameters('tr_storage_properties_typeProperties_scope')]"
@@ -533,7 +588,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_6')]"
+				"[resourceId('Microsoft.Resources/deployments', 'feb-db-df-2402_ArmTemplate_7')]"
 			]
 		}
 	]

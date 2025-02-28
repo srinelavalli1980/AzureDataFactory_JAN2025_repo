@@ -7,9 +7,21 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "feb-db-df-2402"
 		},
+		"DS_SINK_Validate_2402_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'DS_SINK_Validate_2402'"
+		},
+		"LS_2_getmeta_data_validate_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_2_getmeta_data_validate'"
+		},
 		"LS_ADLS_metadata_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_metadata'"
+		},
+		"LS_BLOB_Storage2402_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_BLOB_Storage2402'"
 		},
 		"LS_BLOB_Validate_connectionString": {
 			"type": "secureString",
@@ -23,6 +35,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_GetMetadata'"
 		},
+		"LS_Getmetadata_2402_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Getmetadata_2402'"
+		},
 		"LS_Hospital_metadata_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_Hospital_metadata'"
@@ -31,33 +47,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_INPUT_DF'"
 		},
+		"LS_LOOKUP_Valid_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_LOOKUP_Valid'"
+		},
 		"LS_Multi_file_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_Multi_file'"
 		},
-		"LS_Out_health_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_Out_health'"
-		},
-		"LS_SINK_DATA_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_SINK_DATA'"
-		},
-		"LS_SQLDBA_Dev_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_SQLDBA_Dev'"
-		},
-		"LS_SQLDBA_SINK_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_SQLDBA_SINK'"
-		},
-		"LS_SQLDBA_mini_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_SQLDBA_mini'"
+		"DS_SINK_Validate_2402_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://febstorageaccount2402.dfs.core.windows.net/"
 		},
 		"LS_ADLS_metadata_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_Health_json_http_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().Baseurl}"
 		},
 		"LS_HttpServer1_properties_typeProperties_url": {
 			"type": "string",
@@ -82,62 +90,6 @@
 		"LS_Multi_file_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
-		},
-		"LS_Out_health_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
-		},
-		"LS_PAramaeter_set_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "@{linkedService().BaseURL}"
-		},
-		"LS_SINK_DATA_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "jan-batch-sql-server.database.windows.net"
-		},
-		"LS_SINK_DATA_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "dev-ss-test"
-		},
-		"LS_SINK_DATA_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "adminuser"
-		},
-		"LS_SQLDBA_Dev_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "jan-batch-sql-server.database.windows.net"
-		},
-		"LS_SQLDBA_Dev_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "dev-ss-test"
-		},
-		"LS_SQLDBA_Dev_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "adminuser"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "jan-batch-sql-server.database.windows.net"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "jan-azure-db"
-		},
-		"LS_SQLDBA_SINK_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "adminuser"
-		},
-		"LS_SQLDBA_mini_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "jan-batch-sql-server.database.windows.net"
-		},
-		"LS_SQLDBA_mini_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "jan-azure-db"
-		},
-		"LS_SQLDBA_mini_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "adminuser"
 		}
 	},
 	"variables": {
@@ -249,6 +201,36 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_SINK_Validate_2402')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('DS_SINK_Validate_2402_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('DS_SINK_Validate_2402_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_2_getmeta_data_validate')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_2_getmeta_data_validate_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_ADLS_metadata')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -261,6 +243,19 @@
 						"type": "SecureString",
 						"value": "[parameters('LS_ADLS_metadata_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_BLOB_Storage2402')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_BLOB_Storage2402_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -300,6 +295,39 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('LS_GetMetadata_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_Getmetadata_2402')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_Getmetadata_2402_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_Health_json_http')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"Baseurl": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('LS_Health_json_http_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
 				}
 			},
 			"dependsOn": []
@@ -426,6 +454,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_LOOKUP_Valid')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_LOOKUP_Valid_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_Multi_file')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -437,131 +478,6 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('LS_Multi_file_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_Out_health')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_Out_health_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_Out_health_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_PAramaeter_set')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"parameters": {
-					"BaseURL": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "HttpServer",
-				"typeProperties": {
-					"url": "[parameters('LS_PAramaeter_set_properties_typeProperties_url')]",
-					"enableServerCertificateValidation": true,
-					"authenticationType": "Anonymous"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_SINK_DATA')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('LS_SINK_DATA_properties_typeProperties_server')]",
-					"database": "[parameters('LS_SINK_DATA_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_SINK_DATA_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('LS_SINK_DATA_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_SQLDBA_Dev')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_server')]",
-					"database": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_SQLDBA_Dev_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('LS_SQLDBA_Dev_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_SQLDBA_SINK')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_server')]",
-					"database": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_SQLDBA_SINK_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('LS_SQLDBA_SINK_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_SQLDBA_mini')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('LS_SQLDBA_mini_properties_typeProperties_server')]",
-					"database": "[parameters('LS_SQLDBA_mini_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('LS_SQLDBA_mini_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('LS_SQLDBA_mini_password')]"
 					}
 				}
 			},
