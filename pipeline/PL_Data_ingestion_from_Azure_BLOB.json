@@ -10,7 +10,10 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "DS_BLOB_Storage_2402",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "hospital"
+						}
 					},
 					"timeout": "0.12:00:00",
 					"sleep": 10,
