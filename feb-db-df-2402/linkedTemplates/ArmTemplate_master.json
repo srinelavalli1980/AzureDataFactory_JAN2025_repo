@@ -116,6 +116,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_size_cnt_dataset'"
 		},
+		"LS_NoteBook_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_NoteBook'"
+		},
 		"DS_SINK_Validate_2402_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://febstorageaccount2402.dfs.core.windows.net/"
@@ -231,6 +235,10 @@
 		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
 			"type": "string",
 			"defaultValue": "@trigger().outputs.windowEndTime"
+		},
+		"LS_NoteBook_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0302-061340-vb685esi"
 		},
 		"containerUri": {
 			"type": "string",
@@ -376,6 +384,9 @@
 					"LS_size_cnt_dataset_connectionString": {
 						"value": "[parameters('LS_size_cnt_dataset_connectionString')]"
 					},
+					"LS_NoteBook_accessToken": {
+						"value": "[parameters('LS_NoteBook_accessToken')]"
+					},
 					"LS_Out_health_properties_typeProperties_url": {
 						"value": "[parameters('LS_Out_health_properties_typeProperties_url')]"
 					},
@@ -423,6 +434,9 @@
 					},
 					"LS_log_json_properties_typeProperties_url": {
 						"value": "[parameters('LS_log_json_properties_typeProperties_url')]"
+					},
+					"LS_NoteBook_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('LS_NoteBook_properties_typeProperties_existingClusterId')]"
 					}
 				}
 			},

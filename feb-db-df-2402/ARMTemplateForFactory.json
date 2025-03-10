@@ -116,6 +116,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_size_cnt_dataset'"
 		},
+		"LS_NoteBook_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_NoteBook'"
+		},
 		"DS_SINK_Validate_2402_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://febstorageaccount2402.dfs.core.windows.net/"
@@ -231,6 +235,10 @@
 		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
 			"type": "string",
 			"defaultValue": "@trigger().outputs.windowEndTime"
+		},
+		"LS_NoteBook_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0302-061340-vb685esi"
 		}
 	},
 	"variables": {
@@ -11930,6 +11938,60 @@
 				"type": "ManagedIdentity",
 				"typeProperties": {
 					"resourceId": "/subscriptions/dab63fa7-b658-4f30-9c43-166248715acc/resourceGroups/Dattha/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testuserassignedmanagement"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Notebooks')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Workspace/Users/siri198408@outlook.com/transform_population_data"
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_NoteBook",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_NoteBook')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_NoteBook')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-3210958976955185.5.azuredatabricks.net/",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('LS_NoteBook_accessToken')]"
+					},
+					"existingClusterId": "[parameters('LS_NoteBook_properties_typeProperties_existingClusterId')]"
 				}
 			},
 			"dependsOn": []

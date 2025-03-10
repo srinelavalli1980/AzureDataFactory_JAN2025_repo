@@ -86,6 +86,9 @@
 		"LS_size_cnt_dataset_connectionString": {
 			"value": ""
 		},
+		"LS_NoteBook_accessToken": {
+			"value": ""
+		},
 		"DS_SINK_Validate_2402_properties_typeProperties_url": {
 			"value": "https://febstorageaccount2402.dfs.core.windows.net/"
 		},
@@ -172,6 +175,9 @@
 		},
 		"triggertumbling_properties_pipeline_parameters_Windowsendtime": {
 			"value": "@trigger().outputs.windowEndTime"
+		},
+		"LS_NoteBook_properties_typeProperties_existingClusterId": {
+			"value": "0302-061340-vb685esi"
 		},
 		"containerUri": {
 			"value": ""

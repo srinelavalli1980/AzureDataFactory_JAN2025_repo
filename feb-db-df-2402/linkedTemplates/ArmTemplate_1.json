@@ -55,6 +55,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_size_cnt_dataset'"
 		},
+		"LS_NoteBook_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_NoteBook'"
+		},
 		"LS_Out_health_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
@@ -118,6 +122,10 @@
 		"LS_log_json_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devjanbatchadlsgen2.dfs.core.windows.net/"
+		},
+		"LS_NoteBook_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0302-061340-vb685esi"
 		}
 	},
 	"variables": {
@@ -392,6 +400,24 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_NoteBook')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-3210958976955185.5.azuredatabricks.net/",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('LS_NoteBook_accessToken')]"
+					},
+					"existingClusterId": "[parameters('LS_NoteBook_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_2_getmeta_data_validate')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -490,31 +516,6 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"container": "raw"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_BLOB_Validate')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_BLOB_Validate",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"container": "storagecontainer"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
