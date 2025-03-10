@@ -11961,7 +11961,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Workspace/Users/siri198408@outlook.com/transform_population_data"
+							"notebookPath": "/Users/siri198408@outlook.com/transform_population_data"
 						},
 						"linkedServiceName": {
 							"referenceName": "LS_NoteBook",
