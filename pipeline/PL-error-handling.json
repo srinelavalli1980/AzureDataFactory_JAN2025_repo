@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "COPY data to tar",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -68,6 +68,11 @@
 				]
 			}
 		],
+		"variables": {
+			"testvar": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }

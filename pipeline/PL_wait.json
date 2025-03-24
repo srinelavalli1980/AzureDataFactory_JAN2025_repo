@@ -1,0 +1,11 @@
+{
+	"name": "PL_wait",
+	"properties": {
+		"variables": {
+			"testvar": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
