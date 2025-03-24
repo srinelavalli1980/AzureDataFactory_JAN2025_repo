@@ -26,7 +26,27 @@
 							"type": "DelimitedTextReadSettings"
 						}
 					},
-					"enableStaging": false
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
 				},
 				"inputs": [
 					{
@@ -34,6 +54,15 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "raw"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_2_getmeta_data_validate",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "silver"
 						}
 					}
 				]
